@@ -1,0 +1,71 @@
+QUICK(ARR, N, BEG, END, LOC)
+Here ARR is an array with N elements having its boundry values as BEG and END. We are having LEFTPTR and RIGHTPTR local variables that scan ARR with the variable at LOC. This algorithm gives the element at BEG position to its actual position in the array if it were sorted.
+
+1.  [initialize pointers] 
+    Set LEFTPTR = BEG
+    RIGHTPTR = END
+    LOC = BEG
+
+2.  [Scan ARR from right to left]
+    (a) Repeat while ARR[RIGHTPTR]>=ARR[LOC] and RIGHTPTR>LOC:
+            RIGHTPTR = RIGHTPTR - 1
+    (b) if RIGHTPTR=LOC, then: return
+    
+    (c) if ARR[RIGHTPTR] < ARR[LOC], then:
+        (i) [interchange the values]
+            set TEMP = ARR[RIGHTPTR]
+            ARR[RIGHTPTR] = ARR[LOC]
+            ARR[LOC] = TEMP
+        (ii)[set new location]
+            set LOC = RIGHTPTR
+        (iii) go to step 3
+
+3.  [scan ARR from left to right]
+    (a) repeat while ARR[LEFTPTR]<=ARR[LOC] and LEFTPTR<LOC:
+            set LEFTPTR = LEFTPTR + 1
+    (b) if LEFTPTR = LOC, then: return
+    (c) if ARR[LEFTPTR]>ARR[LOC], then:
+        (i) [interchange the values]
+            set TEMP = ARR[LEFTPTR]
+            ARR[LEFTPTR] = ARR[LOC]
+            ARR[LOC] = TEMP
+        (ii)LOC = LEFTPTR
+        (iii)   Go to step 2
+
+
+QUICKSORT(LOWER, UPPER)
+QUICKSORT is an algorithm in which we sort an array by using the QUICK algorithm above. We have 2 stacks as LOWER and UPPER in which we store the boundry values of the array to be sorted
+
+1.  [initiaze] set TOP = NULL
+
+2.  [add boundry points of the array to stack if number of elements is minimum 2]
+    if N>1, then:   
+        set TOP = TOP + 1
+        LOWER[TOP] = 1
+        UPPER[TOP] = N
+    [end of if structure]
+
+3.  repeat steps 4 to 7 while TOP != NULL
+
+4.  set BEG = LOWER[TOP]
+    END = UPPER TOP
+    TOP = TOP - 1
+
+5.  Call QUICK(ARR, N, BEG, END, LOC) function
+
+6.  [adding boundry values of left subarray if it has 2 or more elements]
+    if BEG < LOC - 1, then:
+        set TOP = TOP + 1
+        LOWER[TOP] = BEG
+        UPPER[TOP] = LOC - 1
+    [end of if structure]
+
+7.  [adding boundry values of right subarray if it has 2 or more elements]
+    if END > LOC + 1, then:
+        set TOP = TOP + 1
+        LOWER[TOP] = LOC + 1
+        UPPER[TOP] = END
+    [end of if structure]
+[end of step 3 loop]
+
+8.  Exit

@@ -1,0 +1,17 @@
+INSERT(LA, N, ITEM, POS)
+We have a linear array LA with total number of elements N. We have to add an element ITEM at position POS in the array, where POS is a positive integer such that POS<N. 
+
+1.  [initialize counter] set i=N
+
+2.  repeat steps 3 and 4 while i>=POS 
+
+3.  Set LA[i+1]=LA[i]   [copies ith element to i+1th element]
+
+4.  Set i=i-1       [reduce counter]
+[end of step 2 loop]
+
+5.  Set LA[POS]=ITEM    [inserting ITEM to array]
+
+6.  [Reset N]   N=N+1
+
+7.  Exit

@@ -1,0 +1,15 @@
+TOWER(N, BEG, AUX, END)
+This is an algorithm in which we have 3 pegs named BEG, AUX and END. BEG has N number of disks which we have to move to END using AUX. 
+
+1.  if N = 1, then Write BEG -> END and return.
+
+2.  [moving N - 1 disks to AUX]
+    Call TOWER(N - 1, BEG, END, AUX)    [procedure]
+
+3.  [move Nth disk from BEG to END]
+    Write BEG -> END.
+
+4.  [moving N - 1 disks form AUX to END]
+    Call TOWER(N - 1, AUX, BEG, END)    [procedure]
+
+5.  Exit.

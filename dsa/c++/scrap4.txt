@@ -1,0 +1,14 @@
+1 [initialize pivot and pointers] set pivot=a[lb], start=lb, end=ub
+2 repeat steps 3 to 5 while start<end
+3 repeat while a[start]<pivot: 
+    set start=start+1 [increment]  
+    [end of loop]
+4 repeat while a[end]>pivot: 
+    set end=end-1 [decrement] 
+    [end of loop]
+5 if start<end, then: 
+    [interchange a[start] and a[end]] set temp=a[start], a[start]=a[end],a[end]=temp 
+    [end of if structure]
+  [end of step 3 loop]
+6 [interchange a[lb] and a[end]] set temp=a[lb], a[lb]=a[end], a[end]=temp
+7 exit

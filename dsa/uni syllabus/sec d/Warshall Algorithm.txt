@@ -1,0 +1,21 @@
+WARSHALL ALGORITHM:
+
+1.  repeat for i, j = 0, 1, 2, ..., M:
+        if A[i,j] = 0, then:
+            set P[i, j] = 0
+        else:
+            set P[i, j] = 1
+        [end of if structure]
+    [end of loop]
+
+2.  repeat steps 3 and 4 for k = 1, 2, 3, 4, ..., M:
+
+3.      repeat step 4 for i = 1, 2, 3, 4, ..., M:
+
+4.          repeat for j= 1, 2, 3, 4, ..., M:
+                P[i, j] = P[i, j] OR (P[i, k] AND P[k, j])
+            [end of loop]
+        [endo of step 3 loop]
+    [end of step 2 loop]
+
+5.  exit.

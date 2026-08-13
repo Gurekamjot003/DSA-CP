@@ -1,0 +1,16 @@
+BUBBLE(DATA, N)
+BUBBLE  is an algorithm in which we have a linear array DATA with total number of elements N. We have to sort DATA in ascending order.
+
+1.  repeat steps 2 and 3 for i = n to 1
+
+2.  [initialize pointer] Set ptr=1
+
+3.  repeat while ptr < i:
+        if DATA[ptr]>DATA[ptr+1], then:
+            interchange DATA[ptr] and DATA[ptr+1]
+        [end of if structure]
+        set ptr = ptr + 1       [increment counter]
+[end of loop]
+[end of step 1 loop]
+
+4.  Exit

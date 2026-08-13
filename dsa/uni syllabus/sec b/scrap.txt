@@ -1,0 +1,74 @@
+QUICK(ARR, N, BEG, END, LOC)
+...
+
+1.  [initialize] 
+    LEFTPTR = BEG
+    RIGHTPTR = END
+    LOC = BEG
+
+2.  [Scan ARR from right to left until RIGHTPTR>LOC]
+    (a) repeat while ARR[RIGHTPTR] >= ARR[LOC] and RIGHTPTR > LOC:
+            RIGHTPTR = RIGHTPTR-1 
+        [end of loop]
+    (b) if LOC = RIGHTPTR, then RETURN
+    (c) if ARR[RIGHTPTR] < ARR[LOC], then:
+        (i)     [interchange the values]
+                set TEMP = ARR[RIGHTPTR]
+                ARR[RIGHTPTR] = ARR[LOC]
+                ARR[LOC] = TEMP
+        (ii)    [set new location]
+                set LOC = RIGHTPTR
+        (iii)   go to step 3
+
+3.  [scan ARR from left to right until LEFTPTR < LOC]
+    (a) repeat while ARR[LEFTPTR] <= ARR[LOC] and LEFTPTR < LOC:
+            LEFTPTR = LEFTPTR - 1
+        [end of loop]
+    (b) if LEFTPTR = LOC, then RETURN.
+    (c) if ARR[LEFTPTR] > ARR[LOC], then:
+        (i)     [interchange the values]
+                set TEMP = ARR[LEFTPTR]
+                ARR[LEFTPTR] = ARR[LOC]
+                ARR[LOC] = TEMP
+        (ii)    [reset LOC]
+                set LOC = LEFTPTR
+        (iii)   go to step 2
+
+
+QUICKSORT(LOWER, UPPER):
+...
+
+1.  [initialize]    set TOP = NULL
+
+2.  [pass the boundry values of the array to be sorted in LOWER and UPPER if it has 2 or more elements]
+    if N > 1, then:
+        set TOP = TOP + 1
+        LOWER[TOP] = 1
+        UPPER[TOP] = N
+    [end of if structure]
+
+3.  repeat steps 4 to 7 while TOP != NULL
+
+4.  [initialize local varialbes]
+    set BEG = LOWER[TOP]
+    END = UPPER[TOP]
+    TOP = TOP - 1
+
+5.  Call QUICK(ARR, N, BEG, END, LOC) [procedure]
+
+6.  [pushing boundry values of left subarray if it has 2 or more elements]
+    if BEG < LOC - 1, then:
+        set TOP = TOP + 1
+        LOWER[TOP] = BEG
+        UPPER[TOP] = LOC - 1
+    [end of if structure]
+
+7.  [pushing boundry values of right subarray if it has 2 or more elements]
+    if LOC + 1 < END, then:
+        set TOP = TOP + 1
+        LOWER[TOP] = LOC + 1
+        UPPER[TOP] = END
+    [end of if structure]
+[end of step 3 loop]
+
+8. exit.

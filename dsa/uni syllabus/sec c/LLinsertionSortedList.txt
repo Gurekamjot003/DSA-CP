@@ -1,0 +1,30 @@
+FINDA(INFO, LINK, ITEM, LOC)
+This procedure finds the position at which the element ITEM can be added in a sorted linked list LIST.
+
+1.  [empty list]
+    if START = NULL, then:
+        set LOC = NULL and return
+    [end of if structure]
+
+2.  [special case]
+    if ITEM < INFO[START], then:
+        set LOC = NULL and return
+    [end of if structure]
+
+3.  [initialize pointers] 
+    set SAVE = START
+    PTR = LINK[START]
+
+4.  Repeat steps 5 and 6 while PTR != NULL
+
+5.  if ITEM <= INFO[PTR], then:
+        set LOC = SAVE and return
+    [end of if structure]
+
+6.  set SAVE = PTR 
+    PTR = LINK[PTR]
+[end of step 4 loop]
+
+7.  set LOC = SAVE
+
+8.  Exit

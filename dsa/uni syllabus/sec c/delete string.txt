@@ -1,0 +1,13 @@
+DELETE(T, P)
+This algorithm aims to delete all occurances of pattern P in text T
+
+1.  [Find index of P]   set X = INDEX(T, P)
+
+2.  repeat while x != 0:
+        (a) set T = DELETE(T, X, LENGTH(P)) [delete P]
+        (b) set X = INDEX(T, P)     [update X]
+    [end of loop]
+
+3.  Write T
+
+4.  Exit.

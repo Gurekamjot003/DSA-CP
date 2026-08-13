@@ -1,0 +1,21 @@
+SHORTEST PATH ALGORITHM
+
+1.  repeat for i, j = 1, 2, 3, ..., M:
+        if W[i, j] = 0, then:
+            set Q[i, j] = (x)
+        else:  
+            set Q[i, j] = W[i, j]
+        [end of if structure]
+    [end of loop]
+
+2.  repeat steps 3 and 4 for k = 1 to M:
+
+3.      repeat step 4 for i = 1 to M:
+
+4.          repeat for j = 1 to M:
+                set Q[i, j] = MIN(Q[i, j], (Q[i, k]+ Q[k, j]))
+            [end of loop]
+    [end of step 3 loop]
+[end of step 2 loop]
+
+5.  exit.

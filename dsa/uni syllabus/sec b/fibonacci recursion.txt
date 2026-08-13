@@ -1,0 +1,13 @@
+FIBONACCI(FIBO, N)
+this algorithm returns a list upto N elements in which first two terms are 0 and 1, and every term after that is the sum of 2 preceding terms. Value which is to be printed is going to be stored in FIBO
+
+1.  [base condition]
+    if N = 0 or N = 1, then set FIBO = N and return
+
+2.  call FIBONACCI(FIBA, N-2)   [procedure]
+
+3.  call FIBONACCI(FIBB, N-1)   [procedure]
+
+4.  set FIBO = FIBA + FIBB
+
+5.  Exit

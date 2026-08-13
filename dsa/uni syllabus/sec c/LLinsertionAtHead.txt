@@ -1,0 +1,19 @@
+INSERT(INFO, LINK, AVAIL, START, ITEM)
+We are having a linked list LIST whose first node's location is given as START. We have to insert an element ITEM at the head of LIST where AVAIL is a pointer that points to the space available in LIST
+
+1.  if AVAIL = NULL, then:
+        Write "OVERFLOW" and exit.
+    [end of if structure]
+    
+2.  set NEW = AVAIL and AVAIL = LINK[AVAIL]
+
+3.  set INFO[NEW] = ITEM
+    [inserting ITEM into INFO]
+
+4.  LINK[NEW] = START       
+    [new node now points to the original first node]
+
+5.  set START = NEW
+    [changes START so that it points to new node]
+
+6.  Exit

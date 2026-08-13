@@ -1,0 +1,18 @@
+SEARCH(INFO, LINK, START, ITEM, LOC)
+In this algorithm we have LIST which is a linked list whose first element is located at START position. We have to search ITEM in the elements of LIST and return its location LOC.
+
+1.  [initialize PTR]    set PTR = START
+
+2.  repeat step 3 while PTR != NULL
+
+3.  if ITEM = INFO[PTR], then:      [search is successful]
+        set LOC = PTR and exit
+    else:  
+        set PTR = LINK[PTR]         
+        [PTR now points to the next pointer]
+    [end of if structure]
+[end of step 2 loop]
+
+4.  set LOC = NULL  [search unsuccessful]
+
+5.  Exit.

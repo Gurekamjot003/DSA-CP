@@ -1,0 +1,11 @@
+FACTORIAL(FACT, N)
+This algorithm calculates the N! value and storing it in the variable FACT by using recursion method i.e. calling the procedure itself
+
+1.  [initialize base condition]
+    if N = 0 or N = 1, then set FACT = 1 and return
+
+2.  call FACTORIAL(FACT, N - 1) [procedure]
+
+3.  set FACT = N * FACT     [setting final value of FACT]
+
+4.  Exit.

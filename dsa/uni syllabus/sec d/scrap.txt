@@ -1,0 +1,45 @@
+CASEA(INFO, LEFT, RIGHT, ROOT, LOC, PAR)
+This procedure deletes the node N at location LOC, where N does not have two children. The pointer PAR gives the location of the parent of N, or eise PAR = NULL indicates that N is the root node. The pointer CHILD gtves the location of the only child of N, or else CHILD = NULL indicates N has no children.
+1. [Initializes CHILD ]
+     If LEFT[LOC] = NULL and [RIGHTILOC] = NULL, then:
+          Set CHILD = NULL.
+     Else if LEFT[LOC] != NULL, then:
+          Set CHILD = LEFT[LOC].
+     Else
+          Set CHILD = RIGHT[LOC].
+     [End of If structure.]
+
+2.   If PAR = NULL, then:
+          If LOC = LEFT[PAR], then:
+               Set LEFT[PAR] = CHILD.
+          else:
+               set RIGHT[PAR] = CHILD.
+          [end of if structure]
+     else:
+          set ROOT = CHILD.
+     [End of If structure.]
+
+3.   Return.
+
+CASEB(INFO, LEFT, RIGHT, ROOT, LOC, PAR)
+
+1. [Find SUC and PARSUC]
+     (a) Set PTR = RIGHT[LOC] and SAVE = LOC.
+     (b) Repeat while LEFT[PTR] != NULL:
+          set SAVE = PTR and PTR = LEFT[PTR].
+     [End of loop.]
+     (c) Set SUC and PARSUC SAVE.
+2. [Delete inorder successor. using Procedure 7.6.]
+     Call CASEA(INFO, LEFT, RIGHT, ROOT, SUC, PARSUC).
+3. [Replace node N by its inorder successor.]
+     (a) If PAR != NULL, then:
+          If LOC = LEFT[PTR], then:
+               Set LEFT[PTR] = SUC.
+          Else:
+               set RIGHT[PTR] = SUC.
+          [End of If structure.]
+     Else:
+          set ROOT = SUC.
+          [end of if structure]
+     (b)  set LEFT[SUC] = LEFT[LOC] and RIGHT[SUC] = RIGHT[LOC]
+4. Return.

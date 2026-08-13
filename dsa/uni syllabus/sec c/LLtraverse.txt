@@ -1,0 +1,15 @@
+ALGORITHM: (traversing a linked list)
+In this algorithm we are having a list which is a linked list. We have to apply a PROCESS to each element.
+
+1.  [initialize pointer] 
+    set PTR = START
+
+2.  repeat steps 3 and 4 while PTR != NULL
+
+3.  apply PROCESS to INFO[PTR]
+
+4.  [reset PTR] set PTR = LINK[PTR]   
+    [PTR now points to the next pointer]
+[end of step 2 loop]
+
+5.  Exit

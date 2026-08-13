@@ -1,0 +1,29 @@
+INORD[INFO, LEFT, RIGHT, ROOT]
+
+1.  [initialize] 
+    set TOP = 1
+    STACK[TOP] = NULL
+    PTR = ROOT
+
+2.  if LEFT[PTR] != NULL, then:
+        set TOP = TOP + 1
+        STACK[TOP] = PTR
+        PTR = LEFT[PTR]
+    [end of if structure]
+
+3.  set PTR = STACK[TOP]
+    TOP = TOP - 1
+    
+4.  repeat steps 5 and 7 while PTR != NULL
+
+5.  apply PROCESS to INFO[PTR]
+
+6.  if RIGHT[PTR] != NULL, then:
+        (a) set PTR = RIGHT[PTR]
+        (b) go to step 3
+    [end of if structure]
+
+7.  set PTR = STACK[TOP]
+    TOP = TOP - 1
+
+8.  Exit

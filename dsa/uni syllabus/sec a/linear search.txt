@@ -1,0 +1,16 @@
+LINEAR(DATA, N, ITEM, LOC)
+LINEAR is an alogorithm in which we have a linear array DATA with N number of elements. We have to traverse the array and search for element ITEM, and then give its location LOC in the array
+
+1.  [initialize pointer]    set LOC = 1
+
+2.  [Add ITEM at the end of DATA]   Set DATA[N+1] = ITEM
+
+3.  Repeat while DATA[LOC] != ITEM:
+        Set LOC = LOC + 1
+[End of loop]
+
+4.  [Search successful?]    if LOC = N + 1, then:
+                                Set LOC = 0
+                            [end of if structure]
+
+5. Exit                    

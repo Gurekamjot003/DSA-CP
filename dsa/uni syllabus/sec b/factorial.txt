@@ -1,0 +1,10 @@
+FACTORIAL(FACT, N)
+This algorith calculates the value of N! and store it in the variable FACT
+
+1.  set FACT = 1        [initialize]
+
+2.  repeat for i = 1 to N:
+        set FACT = FACT * i
+    [end of loop]
+    
+3.  exit

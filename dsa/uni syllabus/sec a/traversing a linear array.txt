@@ -1,0 +1,13 @@
+Algorithm: Traversing a linear array (LA, LB, UB, PROCESS)
+we have a linear array LA with n elements with first poisition being lower bound LB and last position being upper bound UB. We have to access and PROCESS to each element also known as traversal. 
+
+1. set top = LB [initializing counter]
+
+2. repeat steps 3 and 4 while top <= UB    
+
+3. apply PROCESS to LA[top]    [traversing]
+
+4. [reset counter] set top = top + 1
+[end of step 2 loop]
+
+5. exit

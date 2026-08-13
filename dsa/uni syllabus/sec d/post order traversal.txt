@@ -1,0 +1,33 @@
+POSTORD(INFO, LEFT, RIGHT, ROOT)
+
+1.  set PTR = ROOT
+    TOP = 1
+    STACK[TOP] = NULL
+
+2.  repeat steps 3 - 5 while PTR != NULL
+
+3.  set TOP = TOP + 1
+    STACK[TOP] = PTR
+    
+4.  if RIGHT[PTR] != NULL, then:
+        SET TOP = TOP + 1
+        STACK[TOP] = -PTR
+    [end of if structure]
+    
+5.  set PTR = LEFT[PTR]
+[end of step 2 loop]
+
+6.  set PTR = STACK[TOP]
+    TOP = TOP - 1
+
+7.  if PTR > 0, then:
+        (a) apply PROCESS to INFO[PTR]
+        (b) go to step 6
+    [end of if structure]
+
+8.  if PTR < 0, then:
+        (a) set PTR = -PTR
+        (b) go to step 2
+    [end of if structure]
+
+9. Exit.        

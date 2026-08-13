@@ -1,0 +1,20 @@
+ALGORITHM
+This algorithm finds the value of a post fix expression using a stack STACK. P is a stack containing a post fix expression
+
+1.  PUSH right parenthesis at the end of P. This will act as a    sentinel
+
+2.  Scan P from left to right and repeat steps 3 and 4 until right paranthesis is encountered
+
+3.  if an operand is encountered, then:
+        PUSH it in the STACK
+    [end of if structure]
+    
+4.  if an operator (X) is encountered, then:
+        A.  POP the TOP element A from the STACK, and then POP 
+            the next to TOP element B from the STACK
+        B.  Perform operation B (X) A and add its value to STACK
+    [end of if structure]
+
+5.  set VALUE = TOP element in STACK
+
+6.  Exit

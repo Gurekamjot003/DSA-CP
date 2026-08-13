@@ -1,0 +1,17 @@
+INSLOC(INFO, LINK, AVAIL, ITEM, LOC)
+This algorithm inserts ITEM to a linked list LIST at location LOC
+
+1.  if AVAIL = NULL, then:
+        Write "OVERFLOW" and exit.
+    [end of if structure]
+
+2.  set NEW = AVAIL and AVAIL = LINK[AVAIL]
+
+3.  set INFO[NEW] = ITEM
+
+4.  if LOC = NULL, then:        [insertion at head case]
+        set LINK[NEW] = START and START = NEW
+    else:
+        set LINK[NEW] = LINK[LOC] and LINK[LOC] = NEW
+
+5.  Exit.

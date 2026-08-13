@@ -1,0 +1,22 @@
+QINSERT(QUEUE, N, FRONT, REAR, ITEM)
+this algorithm inserts an element into a queue
+
+1.  [QUEUE already full?]
+    if (FRONT = 1 and REAR = N) OR (FRONT = REAR + 1), then:    
+        Write "OVERFLOW" and return.
+    [end of if structure]
+
+2.  [increment REAR]   
+    if REAR = NULL, then:
+        (a) set FRONT = 1 
+        (b) REAR = 1
+    else if REAR = N, then:
+        set REAR = 1
+    else:  
+        set REAR = REAR + 1
+    [end of if structure]
+
+3.  [insert ITEM at new REAR]
+    set QUEUE[REAR] = ITEM
+
+4.  Exit.

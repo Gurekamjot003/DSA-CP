@@ -1,0 +1,23 @@
+PREODR(INFO, LEFT, RIGHT, ROOT)
+
+1.   set PTR = ROOT
+     TOP = 1
+     STACK[TOP] = NULL
+     
+2.   repeat steps 3 to 5 while PTR != NULL
+
+3.   if RIGHT[PTR] != NULL, then:
+          set TOP = TOP + 1
+          STACK[TOP] = RIGHT[PTR]
+     [end of if structure]
+
+4.   apply PROCESS to INFO[PTR]
+
+5.   if LEFT[PTR] != NULL, then:
+          set PTR = LEFT[PTR]
+     else:
+          set PTR = STACK[TOP]
+          TOP = TOP - 1 
+     [end of if structure]
+
+6.   exit.

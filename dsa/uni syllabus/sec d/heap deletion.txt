@@ -1,0 +1,35 @@
+DELHEAP(TREE, N, ITEM)
+
+1.  set ITEM = TREE[1]
+    LAST = TREE[N]
+    N = N - 1
+
+2.  set PTR = 1
+    LEFT = 2
+    RIGHT = 3
+
+3.  repeat steps 4 to 6 while RIGHT <= N
+
+4.  if LAST >= TREE[LEFT] and if LAST >= TREE[RIGHT], then:
+        set TREE[PTR] = LAST and return
+    [end of if structure]
+
+5.  if TREE[LEFT] > TREE[RIGHT], then:
+        set PTR = TREE[LEFT]   
+        PTR = LEFT
+    else:
+        set PTR = TREE[RIGHT]
+        PTR = RIGHT
+    [end of if structure]
+
+6.  set LEFT = PTR * 2
+    RIGHT = LEFT + 1
+[end of step 3 loop]
+
+7.  if LEFT = N and if LAST < N, then:
+        set PTR = LEFT
+    [end of if structure]
+
+8.  set TREE[PTR] = LAST
+
+9.  Exit.

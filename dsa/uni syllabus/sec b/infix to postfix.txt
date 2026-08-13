@@ -1,0 +1,22 @@
+POST(P, Q)
+this algorithm converts a infix arithmetic notation given in Q into a postfix notation we have to enter in P using a stack.
+
+1.  PUSH right paranthesis to Q and Push left paranthesis to the STACK. [right paranthesis acts as a sentinel]
+
+2.  Scan Q from left to right and repeat steps 3 to 6 until STACK becomes empty
+
+3.  if left paranthesis is encountered, then: push it to the STACK
+
+4.  if an operand is encountered,  push it to P
+
+5.  if an operator is encountered, then:
+    (a) pop the operators from the top of stack having equal or higher precedence than operator and push it to P
+    (b) push operator to the STACK
+
+6.  if a right paranthesis is encountered, then:
+    (a) pop the elements from STACK one by one and PUSH them to the P until a left paranthesis is encountered in STACK
+    (b) pop left paranthesis from the STACK
+        [DO NOT ADD IT TO THE P]
+[end of step 2 loop]
+
+7.  Exit

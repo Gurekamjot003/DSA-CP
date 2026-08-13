@@ -1,0 +1,15 @@
+FIBONACCI(N)
+this algorithm returns a list upto N elements in which first two terms are 0 and 1, and every term after that is the sum of 2 preceding terms
+
+1.  [initialize] 
+    set A = 0
+    B = 1
+    
+2.  Repeat for i = 0 to N:
+        print A
+        set C = A + B
+        A = B
+        B = C
+    [end of loop]
+
+3.  Exit

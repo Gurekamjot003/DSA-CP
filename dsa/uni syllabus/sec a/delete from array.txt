@@ -1,0 +1,16 @@
+DELETE(LA, N, ITEM, POS)
+DELETE is an Algorithm in which we have a linear array LA with N total elements. We have to delete an element at position POS from the array and copy its value to ITEM, where POS is a positive integer such that POS<N.
+
+1.  [Set ITEM]    Set ITEM = LA[POS]
+
+2.  [initialize counter] set i = POS
+
+3.  [initialize loop] repeat steps 3 and 4 while i < N
+
+4.  set LA[i] = LA[i+1]     [Moving elements up]
+
+5.  set i = i + 1           [increment counter]
+
+6.  [Reset N] Set N = N - 1
+
+7.  Exit.

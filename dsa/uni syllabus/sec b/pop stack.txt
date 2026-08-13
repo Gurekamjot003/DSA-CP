@@ -1,0 +1,12 @@
+POP(STACK, TOP, ITEM)
+POP is an algorith in which we have a linear array POP. We have to remove the element at TOP position following the LIFO principle.
+
+1.  if TOP = NULL, then:                [STACK already empty]
+        Write "UNDERFLOW" and return
+    [end of if structure]
+
+2.  Set ITEM = STACK[TOP]       [giving last element as ITEM]
+
+3.  Set TOP = TOP - 1           [decrement TOP]
+
+4.  Exit

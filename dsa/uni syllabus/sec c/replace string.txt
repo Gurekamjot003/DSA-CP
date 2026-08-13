@@ -1,0 +1,13 @@
+ALGORITHM:
+This algorithm replaces all occurance of pattern P with pattern Q in text T
+
+1.  [get index] set X = INDEX(T, P)
+
+2.  repeat while X != 0:
+        (a) REPLACE(T, P, Q)    [replaces P with Q in T]
+        (b) set X = INDEX(T, P) [reset INDEX]
+    [end of loop]
+
+3.  Write: T
+
+4.  Exit

@@ -1,0 +1,17 @@
+10
+5
+TILII
+1
+L
+3
+LIT
+2
+LL
+3
+LLL
+4
+LLIT
+4
+LLLI
+2
+LT

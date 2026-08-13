@@ -1,0 +1,64 @@
+FIND(INFO, LEFT, RIGHT, ROOT, ITEM, LOC, PAR)
+
+1.  if ROOT = NULL, then:
+        (a) set LOC = NULL and PAR = NULL
+        (b) return
+    [end of if structure]
+
+2.  if INFO[ROOT] = ITEM, then:
+        (a) set LOC = ROOT and PAR = NULL
+        (b) return
+    [end of if structure]
+
+3.  if ITEM < INFO[ROOT], then:
+        set PTR = LEFT[ROOT]
+        SAVE = ROOT
+    else:   
+        set PTR = RIGHT[ROOT]
+        SAVE = PTR
+    [end of if structure]
+
+4.  repeat steps 5 while PTR != NULL
+
+5.  if INFO[PTR] = ITEM, then:  
+        (a) set LOC = PTR and PAR = SAVE
+        (b) return
+    else if ITEM < INFO[PTR], then:
+        set SAVE = PTR
+        PTR = LEFT[PTR]
+    else:   
+        set SAVE = PTR
+        PTR = RIGHT[PTR]
+    [end of if structure]
+[end of step 4 loop]
+
+6.  [unsuccessful search]
+    set LOC = NULL
+    PAR = SAVE
+    
+7.  Exit.
+
+
+INSERT(INFO, LEFT, RIGHT, ROOT, ITEM, AVAIL, LOC)
+
+1.  Call FIND(INFO, LEFT, RIGHT, ROOT, ITEM, LOC, PAR)
+
+2.  if LOC != NULL, then exit
+
+3.  [add ITEM to tree]
+    (a) if AVAIL = NULL, then:
+        Write "OVERFLOW" and return.
+    (b) set NEW = AVAIL, AVAIL = LEFT[AVAIL]
+    (c) LOC = NEW, LEFT[NEW] = NULL, RIGHT[NEW] = NULL
+
+4.  set INFO[NEW] = ITEM
+
+5.  if PAR = NULL, then:
+        ROOT = LOC
+    else if ITEM < INFO[PAR], then:
+        set LEFT[PAR] = LOC
+    else:
+        set RIGHT[PAR] = LOC
+    [end of if structure]
+
+6. exit.

@@ -1,0 +1,12 @@
+PUSH(STACK, TOP, ITEM, MAXTSTACK)
+PUSH is an algorith in which we have a linear array STACK with maximum number of elements as MAXTSTACK. We have to insert an element ITEM in the stack following the LIFO principle. Here TOP is the position of current element in the STACK
+
+1.  if TOP = MAXSTACK, then:        [STACK is full]
+        Write "Overflow" and return
+    [end of if structure]
+    
+2.  set TOP = TOP + 1           [increment TOP]
+
+3.  [putting ITEM in STACK] Set STACK[TOP] = ITEM
+
+4.  Exit.

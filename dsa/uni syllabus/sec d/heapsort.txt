@@ -1,0 +1,12 @@
+HEAPSORT(A, N)
+
+1.  repeat for i = 1 to N:
+        Call INSHEAP(TREE, i, A[i])
+    [end of loop]
+
+2.  repeat while N > 0:
+        (a) call DELHEAP(TREE, N, A[N])
+        (b) N = N - 1
+    [end of loop]
+
+3.  Exit.

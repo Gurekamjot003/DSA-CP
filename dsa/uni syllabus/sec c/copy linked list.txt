@@ -1,0 +1,20 @@
+COPY(INFO1, INFO2, LINK1, LINK2, START1, START2, AVAIL)
+
+1.  set PTR1 = START1
+    PTR2 = START2
+
+2.  repeat steps 3 and 4 while PTR1 != NULL.
+
+3.  if AVAIL = NULL, then: 
+        Write "OVERFLOW" and return.
+    else:  
+        set NEW = AVAIL
+        AVAIL = LINK2[AVAIL]
+    [end of if structure]
+
+4.  PTR1 = LINK1[PTR1]
+    PTR2 = NEW
+    INFO1[PTR1] = INFO2[NEW]
+    NEW = LINK2[NEW]
+
+5.  Exit.

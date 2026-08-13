@@ -1,0 +1,22 @@
+BINARY(DATA, LB, UB, ITEM, LOC)
+BINARY is an algorithm in which we have a sorted linear array DATA with element positions as lower bound LB and upper bound UB. We have to search for element ITEM in the array by comparing with middle element and giving its location LOC
+
+1.  [initilize beginning BEG and ending END] 
+    set BEG = LB, END = UB, MID = int((BEG+END)/2)
+
+2.  [initialize LOC as null]    set LOC = 0
+
+3.  Repeat steps 4 and 5 while DATA[MID] != ITEM AND BEG<END:
+
+4.  if DATA[MID] = ITEM, then:
+        set LOC = MID
+    else if ITEM < DATA[MID]:
+        set END = MID - 1
+    else: 
+        set BEG = MID + 1
+    [end of if structure]
+
+5.  [reset MID] Set MID = int((BEG+END)/2)
+[end of step 3 loop]
+
+6.  Exit

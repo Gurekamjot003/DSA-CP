@@ -1,0 +1,22 @@
+QDELETE(QUEUE, N, FRONT, REAR, ITEM)
+This algorithm deletes an element ITEM from the QUEUE
+
+1.  [QUEUE already empty?]
+    if FRONT = NULL, then: 
+        Write "UNDERFLOW" and return.
+    [end of if structure]
+
+2.  [get value of ITEM]
+    set QUEUE[FRONT] = ITEM
+
+3.  [set new value of FRONT]
+    if FRONT = REAR, then:
+        set FRONT = NULL
+        REAR = NULL
+    else if FRONT = N, then:
+        set FRONT = 1
+    else:
+        set FRONT = FRONT + 1
+    [end of if structure]
+    
+4.  Exit.
