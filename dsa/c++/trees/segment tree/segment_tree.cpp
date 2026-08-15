@@ -10,7 +10,7 @@ class SegmentTree{
         return data[index];
     }
 
-    T combine(T val_1, int val_2){
+    T combine(T val_1, T val_2){
         return val_1 + val_2;
     }
 
