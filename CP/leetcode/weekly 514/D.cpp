@@ -98,7 +98,7 @@ class SegmentTree{
         return data[index];
     }
 
-    T combine(T val_1, int val_2){
+    T combine(T val_1, T val_2){
         return val_1 + val_2;
     }
 
@@ -157,73 +157,91 @@ public:
 };
 
 class Solution {
-    void add(SegmentTree<int>& peaks_st, SegmentTree<ll>&lsum_st, SegmentTree<ll>& l2sum_st, int i){
-        peaks_st.update(i, 1);
-        lsum_st.update(i, i);
-        l2sum_st.update(i, i*i);
+    void add(SegmentTree<ll>& l2_sum, SegmentTree<ll>&l_adj_sum, ll i, set<ll>& l_vals_st,SegmentTree<ll>& l_sum){
+        if(l_vals_st.count(i)) return; // already present
+        l2_sum.update(i, i*i);
+        ll left = val_at_target_in_st(l_vals_st, i); // it will always give value at left as there is no peak at i
+        l_sum.update(i, i-left);
+        l_adj_sum.update(i, left*i);
+        // update value for right 
+        ll right = val_after_target_in_st(l_vals_st, i);
+        if(right != -1){
+            l_sum.update(right, right-i);
+            l_adj_sum.update(right, right*i);
+        }
+        l_vals_st.insert(i);
     }
-    void remove(SegmentTree<int>& peaks_st, SegmentTree<ll>&lsum_st, SegmentTree<ll>& l2sum_st, int i){
-        peaks_st.update(i, 0);
-        lsum_st.update(i, 0);
-        l2sum_st.update(i, 0);
+    void remove(SegmentTree<ll>&l2_sum, SegmentTree<ll>& l_adj_sum, ll i, set<ll>&l_vals_st,SegmentTree<ll>& l_sum){
+        if(!l_vals_st.count(i)) return;
+        l2_sum.update(i, 0);
+        l_adj_sum.update(i, 0);
+        l_sum.update(i, 0);
+        l_vals_st.erase(i);
+        ll left = val_at_target_in_st(l_vals_st, i), right = val_after_target_in_st(l_vals_st, i);
+        // old value will be right * i, new will be right * left
+        if(right != -1){
+            l_sum.update(right, right-left);
+            l_adj_sum.update(right, right*left);
+        }
+    }
+    ll val_at_target_in_st(set<ll>& st, ll target){
+        auto it = st.upper_bound(target);
+        it--;
+        return *it;
+    }
+    ll val_after_target_in_st(set<ll>& st, ll target){
+        auto it = st.upper_bound(target);
+        if(it == st.end()) return -1;
+        return *it;
     }
     
 public:
     vector<long long> countOfPeaks(vector<int>& nums, vector<vector<int>>& queries) {
         vll ans;
-        int n = nums.size();
-        vi peaks(n); vll psum(n), l2sum_arr(n);
-        // SegmentTree peaks_st(peaks);
-        // SegmentTree lsum_st(lsum_arr), l2sum_st(l2sum_arr);
+        ll n = nums.size();
+        vll l_vals(n), l2_sum_arr(n), l_adj_sum_arr(n);
+        SegmentTree l2_sum(l2_sum_arr), l_adj_sum(l_adj_sum_arr), l_sum(l_vals);
+        set<ll> l_vals_st;
+        l_vals_st.insert(0);
         
         rep1(i, n-2){
             if(nums[i]>nums[i+1] && nums[i] > nums[i-1]){
-                // add(peaks_st, lsum_st, l2sum_st, i);
-                peaks[i] = 1;
+                add(l2_sum, l_adj_sum, i, l_vals_st, l_sum);
             }
         }
-        int l = 0;
-        for (int i = 0; i < n; i++)
-        {
-            if (peaks[i])
-            {
-                psum[i] = l;
-                l = 0;
-            }
-            l++;
-        }
-        rep1(i, n - 1) psum[i] += psum[i - 1];
-        
+        int i = 0;
         for(auto&q: queries){
             if(q[0] == 1){
-                int l = q[1], r = q[2];
-                // ll lsum = lsum_st.get_value(l+1, r-1);
-                // ll size = r-l+1;
-                // ll count = peaks_st.get_value(l+1, r-1);
-                // ll l_diff = q[1];
-                // ll l2sum = l2sum_st.get_value(l+1, r-1);
-                // ll cur =   lsum*(size-1 + 2*l_diff) 
-                //          - l_diff*count*(l_diff+size-1)
-                //          - l2sum;
+                ll l = q[1], r = q[2];
                 ll size = r-l+1;
-                ll t1 = (psum[r-1]-l)*(size-1), t2 = 0, t3 = 0, t4 = l*(psum[r-1]+psum[l+1]),t5 = l*l;
-                for(int i = l+1; i<=r-1; i++) t2 += psum[i]*psum[i];
-                for(int i = l+2; i<=r-1; i++) t3 += psum[i]*psum[i-1];
-            
-                ll cur = t1-t2 + t3 + t4 - t5;
-                ans.push_back(cur);
-            }
-            // else{
-            //     int i = q[1], val = q[2];
+                ll cur = 0;
+                ll l1 = val_after_target_in_st(l_vals_st, l); // we want current or greater
+                if(l1 == -1){
+                    ans.push_back(cur);
+                    continue;
+                }
                 
-            //     nums[i] = val;
-            //     for(int j = max(1, i-1); j<=min(n-2, i+1); j++){
-            //         remove(peaks_st, lsum_st, l2sum_st, j);
-            //         if(nums[j-1]<nums[j] && nums[j+1]<nums[j]){
-            //             add(peaks_st, lsum_st, l2sum_st, j);
-            //         }
-            //     }
-            // }
+                cur = max(0ll, (l1-l)*(size-1-(l1-l)));
+                l = l1;
+                size = r-l+1;
+                
+                ll t1 = l_sum.get_value(l+1, r-1)*(size-1+l), t2 = l2_sum.get_value(l+1, r-1), t3 = l_adj_sum.get_value(l+2,r-1);
+                cur += max(0ll,t1-t2+t3);
+                ans.push_back(cur);
+                
+            }
+            else{
+                ll i = q[1], val = q[2];
+                
+                nums[i] = val;
+                for(ll j = max(1ll, i-1); j<=min(n-2, i+1); j++){
+                    remove(l2_sum, l_adj_sum, j, l_vals_st, l_sum);
+                    if(nums[j-1]<nums[j] && nums[j+1]<nums[j]){
+                        add(l2_sum, l_adj_sum, j, l_vals_st, l_sum);
+                    }
+                }
+            }
+            i++;
         }
         
         return ans;
