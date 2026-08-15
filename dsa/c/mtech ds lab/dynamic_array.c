@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct vector
+typedef struct 
 {
     int capacity, size;
     int *arr;
-};
+} vector;
 
 int get_greater_pow_2(int n)
 {
@@ -19,9 +19,9 @@ int get_greater_pow_2(int n)
     return cap;
 }
 
-struct vector *init_vector(int sz, int value)
+vector *init_vector(int sz, int value)
 {
-    struct vector *v = (struct vector *)malloc(sizeof(struct vector));
+    vector *v = (vector *)malloc(sizeof(vector));
 
     v->capacity = get_greater_pow_2(sz);
     v->arr = (int *)malloc(sizeof(int) * v->capacity);
@@ -34,7 +34,7 @@ struct vector *init_vector(int sz, int value)
     return v;
 };
 
-int push_back(struct vector *v, int val)
+int push_back(vector *v, int val)
 {
     if (v == NULL)
         return 0;
@@ -50,7 +50,7 @@ int push_back(struct vector *v, int val)
     return 1;
 }
 
-int access_element(struct vector *v, int i)
+int access_element(vector *v, int i)
 {
     if (i >= v->size || i < 0)
     {
@@ -60,7 +60,7 @@ int access_element(struct vector *v, int i)
     return v->arr[i];
 }
 
-int pop_back(struct vector *v)
+int pop_back(vector *v)
 {
     if (v == NULL || v->size == 0)
         return 0;
@@ -75,7 +75,7 @@ int pop_back(struct vector *v)
     return 1;
 }
 
-void free_vector(struct vector *v)
+void free_vector(vector *v)
 {
     if (v)
     {
@@ -86,7 +86,7 @@ void free_vector(struct vector *v)
 
 int main()
 {
-    struct vector *v = init_vector(0, 0);
+    vector *v = init_vector(0, 0);
     for (int i = 1; i < 100; i++)
         push_back(v, i);
     for (int i = 0; i < v->size; i++)
