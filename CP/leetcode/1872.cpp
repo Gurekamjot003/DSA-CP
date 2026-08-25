@@ -90,29 +90,17 @@ istream& getInputStream() {
 #endif
 
 class Solution {
-
-    int solve(vvi& dp, vi&stones, int i = 1, bool alice_turn = true){
-        if(i == stones.size()-1){
-            if(alice_turn)
-                return stones.back();
-            return - stones.back();
-        }
-        if(dp[i][alice_turn] != INT_MIN) return dp[i][alice_turn];
-
-        int ans;
-        if(alice_turn){
-            ans = max(stones[i] + solve(dp, stones, i+1, !alice_turn), solve(dp, stones, i+1, alice_turn));
-        }
-        else{
-            ans = min(-stones[i] + solve(dp, stones, i+1, !alice_turn), solve(dp, stones, i+1, alice_turn));
-        }
-        return dp[i][alice_turn] = ans;
-    }
 public:
     int stoneGameVIII(vector<int>& stones) {
         int n = stones.size();
         rep1(i, n-1) stones[i] += stones[i-1];
-        vvi dp(n, vi(2, INT_MIN));
-        return solve(dp, stones);
+        int dp[n][2];
+        memset(dp, 0, sizeof(dp));
+        dp[n-1][1] = stones.back(); dp[n-1][0] = -stones.back();
+        for(int i = n-2; i>=0; i--){
+            dp[i][1] = max(stones[i] + dp[i+1][0], dp[i+1][1]);
+            dp[i][0] = min(-stones[i] + dp[i+1][1], dp[i+1][0]);
+        }
+        return dp[1][1];
     }
 };
