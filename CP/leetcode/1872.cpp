@@ -94,13 +94,13 @@ public:
     int stoneGameVIII(vector<int>& stones) {
         int n = stones.size();
         rep1(i, n-1) stones[i] += stones[i-1];
-        int dp[n][2];
-        memset(dp, 0, sizeof(dp));
-        dp[n-1][1] = stones.back(); dp[n-1][0] = -stones.back();
-        for(int i = n-2; i>=0; i--){
-            dp[i][1] = max(stones[i] + dp[i+1][0], dp[i+1][1]);
-            dp[i][0] = min(-stones[i] + dp[i+1][1], dp[i+1][0]);
+        int alice = stones.back(), bob = -stones.back();
+        for(int i = n-2; i>=1; i--){
+            int new_alice = max(stones[i] + bob, alice);
+            int new_bob = min(-stones[i] + alice, bob);
+            alice = new_alice;
+            bob = new_bob;
         }
-        return dp[1][1];
+        return alice;
     }
 };
