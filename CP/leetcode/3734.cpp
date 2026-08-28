@@ -98,13 +98,13 @@ public:
         vi s_freq(26);
         rep(i, n) s_freq[s[i]-'a']++;
         bool one_freq_present = false; 
-        int ch = '\n';
+        int char_at_mid = '\0';
         rep(i, 26){
             if(s_freq[i]%2){
                 if(one_freq_present) return ans;
                 else{
                     one_freq_present = true;
-                    ch = i;
+                    char_at_mid = i;
                 }
             }
         }
@@ -114,7 +114,7 @@ public:
         rep(i, n/2){
             // if greater than that is present then it is a potential answer
             for(int ch = target[i]-'a'+1; ch<='z'-'a'; ch++){
-                if(freq[ch]>1){
+                if(freq[ch]){
                     best_idx = i;
                     char_at_best = ch;
                     break;
@@ -128,7 +128,7 @@ public:
         }
         if(same_pos){
             string to_check = target;
-            if(n%2) to_check[n/2] = ch+'a';
+            if(n%2) to_check[n/2] = char_at_mid+'a';
             for(int i = 0; i<n/2; i++) to_check[n-1-i] = to_check[i];
             if(to_check>target) return to_check;
         }
@@ -137,17 +137,17 @@ public:
 
         freq = s_freq;
         ans = target;
+        rep(i, 26) freq[i]/=2;
         if(n%2){
-            ans[n/2] = ch+'a';
-            freq[ch]--;
+            ans[n/2] = char_at_mid+'a';
         }
         ans[best_idx] = char_at_best+'a';
-        rep(i, best_idx+1) freq[ans[i]-'a']-=2;
-        ch = 0;
+        rep(i, best_idx+1) freq[ans[i]-'a']--;
+        int ch = 0;
         for(int i = best_idx+1; i<n/2; i++){
             while(ch<26 && freq[ch] == 0) ch++;
             ans[i] = ch+'a';
-            freq[ch]-=2;
+            freq[ch]--;
         }
         for(int i=  0; i<n/2; i++){
             ans[n-1-i] = ans[i];
