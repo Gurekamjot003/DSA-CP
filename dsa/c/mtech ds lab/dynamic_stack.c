@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-
+const int INT_MIN = -(1<<30);
 
 
 

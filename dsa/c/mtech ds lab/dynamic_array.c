@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+const int INT_MIN = -(1<<30);
+
 typedef struct 
 {
     int capacity, size;
