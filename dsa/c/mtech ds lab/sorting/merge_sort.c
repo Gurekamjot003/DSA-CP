@@ -26,7 +26,7 @@ void merge(int* nums, int l, int mid, int r){
         arr[ptr++] = nums[ptr2++];
     }
     for(int i = 0; i<(r-l+1); i++){
-        nums[i] = arr[i+l];
+        nums[i+l] = arr[i];
     }
 }
 
