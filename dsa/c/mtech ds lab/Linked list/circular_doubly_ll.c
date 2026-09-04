@@ -1,69 +1,92 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef enum{
-    FALSE = 0, TRUE = 1
+typedef enum
+{
+    FALSE = 0,
+    TRUE = 1
 } boolean;
 
-typedef struct{
+typedef struct Node
+{
     int val;
-    Node* next;
-    Node* prev;
+    struct Node *next;
+    struct Node *prev;
 } Node;
 
-Node* init_node(int val, Node* next, Node* prev){
-    Node* ans = (Node*) malloc(sizeof(Node));
+Node *init_node(int val, Node *next, Node *prev)
+{
+    Node *ans = (Node *)malloc(sizeof(Node));
+    if (!ans)
+        return NULL;
     ans->val = val;
-    if(!next){
+    if (!next)
+    {
         ans->next = ans;
         ans->prev = ans;
     }
 
-    else{
+    else
+    {
         ans->next = next;
         ans->prev = prev;
-        if(next) next->prev = ans;
-        if(prev) prev->next = ans;
+        if (next)
+            next->prev = ans;
+        if (prev)
+            prev->next = ans;
     }
 
     return ans;
 }
 
-Node* search(Node* head, int val){
+Node *search(Node *head, int val)
+{
     // case 1 val at head
-    if(head->val == val) return head;
+    if (!head)
+        return NULL;
+    if (head->val == val)
+        return head;
     // case 2 val present but not at head
-    Node* ptr = head->next;
-    while(ptr != head && ptr->val != val) ptr = ptr->next;
-    if(ptr->val == val) return ptr;
+    Node *ptr = head->next;
+    while (ptr != head && ptr->val != val)
+        ptr = ptr->next;
+    if (ptr->val == val)
+        return ptr;
 
     // case 3 val not present
     return NULL;
 }
 
-Node* insert(Node* head, int val, int target){
-    Node* prev = search(head, target);
-    if(prev){
-        Node* cur = init_node(val, prev->next, prev);
+Node *insert(Node *head, int val, int target)
+{
+    Node *prev = search(head, target);
+    if (prev)
+    {
+        init_node(val, prev->next, prev);
     }
     return head;
 }
 
-Node* delete(Node* head, int target){
-    Node* to_delete = search(head, target);
+Node *delete(Node *head, int target)
+{
+    Node *to_delete = search(head, target);
     // case 1 node not found
-    if(!to_delete) return head;
+    if (!to_delete)
+        return head;
     // case 2 node is head itself
-    if(to_delete == head){
-        if(head->next != head){
-            
-            Node* ans = head->next;
+    if (to_delete == head)
+    {
+        if (head->next != head)
+        {
+
+            Node *ans = head->next;
             ans->prev = head->prev;
             head->prev->next = head->next;
             free(head);
             return ans;
         }
-        else{
+        else
+        {
             free(head);
             return NULL;
         }
@@ -75,11 +98,14 @@ Node* delete(Node* head, int target){
     return head;
 }
 
-Node* delete_all(Node* head){
-    if(!head) return NULL;
-    Node* ptr = head->next;
-    while(ptr && ptr != head){
-        Node* next = ptr->next;
+Node *delete_all(Node *head)
+{
+    if (!head)
+        return NULL;
+    Node *ptr = head->next;
+    while (ptr && ptr != head)
+    {
+        Node *next = ptr->next;
         free(ptr);
         ptr = next;
     }
@@ -87,6 +113,6 @@ Node* delete_all(Node* head){
     return NULL;
 }
 
-int main(){
-
+int main()
+{
 }

@@ -1,57 +1,74 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef enum{
-    FALSE = 0, TRUE = 1
+typedef enum
+{
+    FALSE = 0,
+    TRUE = 1
 } boolean;
 
-typedef struct Node{
+typedef struct Node
+{
     int val;
-    struct Node* next;
+    struct Node *next;
 } Node;
 
-Node* init_node(int val, Node* next){
-    Node* ans = (Node*) malloc(sizeof(Node));
+Node *init_node(int val, Node *next)
+{
+    Node *ans = (Node *)malloc(sizeof(Node));
+    if (!ans)
+        return NULL;
     ans->val = val;
     ans->next = next;
+    return ans;
 }
 
-Node* search(Node* head, int val){
-    while(head && head->val != val) head = head->next;
+Node *search(Node *head, int val)
+{
+    while (head && head->val != val)
+        head = head->next;
     return head;
 }
 
-Node* insert(Node* head, int val, int target){
-    Node* prev = search(head, target);
-    if(prev){
-        Node* cur = init_node(val, prev->next);
+Node *insert(Node *head, int val, int target)
+{
+    Node *prev = search(head, target);
+    if (prev)
+    {
+        Node *cur = init_node(val, prev->next);
         prev->next = cur;
     }
     return head;
 }
 
-Node* delete(Node* head, int target){
-    Node* to_delete = search(head, target);
+Node *delete(Node *head, int target)
+{
+    Node *to_delete = search(head, target);
     // case 1 node not found
-    if(!to_delete) return head;
+    if (!to_delete)
+        return head;
     // case 2 node is head itself
-    if(to_delete == head){
-        Node* ans = head->next;
+    if (to_delete == head)
+    {
+        Node *ans = head->next;
         free(head);
         return ans;
     }
     // case 3 node is anywhere but not head
-    Node* ptr = head;
-    while(ptr && ptr->next != to_delete) ptr = ptr->next;
+    Node *ptr = head;
+    while (ptr && ptr->next != to_delete)
+        ptr = ptr->next;
     ptr->next = ptr->next->next;
     free(to_delete);
     return head;
 }
 
-Node* delete_all(Node* head){
-    Node* ptr = head;
-    while(ptr){
-        Node* next = ptr->next;
+Node *delete_all(Node *head)
+{
+    Node *ptr = head;
+    while (ptr)
+    {
+        Node *next = ptr->next;
         free(ptr);
         ptr = next;
     }
@@ -61,7 +78,7 @@ Node* delete_all(Node* head){
 typedef struct
 {
     int size;
-    Node* front, *back;
+    Node *front, *back;
 } Queue;
 
 int max(int a, int b)
@@ -74,6 +91,8 @@ int max(int a, int b)
 Queue *init()
 {
     Queue *ans = (Queue *)malloc(sizeof(Queue));
+    if (!ans)
+        return NULL;
     ans->size = 0;
     ans->front = ans->back = NULL;
     return ans;
@@ -81,19 +100,27 @@ Queue *init()
 
 boolean is_empty(Queue *q)
 {
-    if (q->size== 0)
+    if (q->size == 0)
         return TRUE;
     return FALSE;
 }
 
 boolean push(Queue *q, int val)
 {
+    if (!q)
+        return FALSE;
     if (is_empty(q))
     {
         q->front = q->back = init_node(val, NULL);
+        if (!q->front)
+            return FALSE;
     }
-    else{
-        q->back->next = init_node(val, NULL);
+    else
+    {
+        Node *node = init_node(val, NULL);
+        if (!node)
+            return FALSE;
+        q->back->next = node;
         q->back = q->back->next;
     }
     q->size++;
@@ -109,21 +136,30 @@ int get_front(Queue *q)
 
 boolean pop(Queue *q)
 {
-    if (is_empty(q))
+    if (!q || is_empty(q))
         return FALSE;
-    
-    Node* to_delete = q->front;
+
+    Node *to_delete = q->front;
     if (q->front == q->back)
     {
         q->front = NULL;
         q->back = NULL;
     }
-    else{
+    else
+    {
         q->front = q->front->next;
     }
     free(to_delete);
     q->size--;
     return TRUE;
+}
+
+void free_queue(Queue *q)
+{
+    if (!q)
+        return;
+    delete_all(q->front);
+    free(q);
 }
 
 int main()
@@ -141,6 +177,7 @@ int main()
         printf("%d\n", get_front(q));
 
     push(q, 7);
+    free_queue(q);
 
     return 0;
 }

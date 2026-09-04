@@ -1,66 +1,84 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef enum{
-    FALSE = 0, TRUE = 1
+typedef enum
+{
+    FALSE = 0,
+    TRUE = 1
 } boolean;
 
-typedef struct{
+typedef struct Node
+{
     int val;
-    Node* next, *prev;
+    struct Node *next, *prev;
 } Node;
 
-Node* init_node(int val, Node* next, Node* prev){
-    Node* ans = (Node*) malloc(sizeof(Node));
+Node *init_node(int val, Node *next, Node *prev)
+{
+    Node *ans = (Node *)malloc(sizeof(Node));
+    if (!ans)
+        return NULL;
     ans->val = val;
     ans->next = next;
-    if(next) next->prev = ans;
-    if(prev) prev->next = ans;
+    if (next)
+        next->prev = ans;
+    if (prev)
+        prev->next = ans;
     return ans;
 }
 
-Node* search(Node* head, int val){
-    while(head && head->val != val) head = head->next;
+Node *search(Node *head, int val)
+{
+    while (head && head->val != val)
+        head = head->next;
     return head;
 }
 
-Node* insert(Node* head, int val, int target){
-    Node* prev = search(head, target);
-    if(prev){
-        Node* cur = init_node(val, prev->next, prev);
-        
+Node *insert(Node *head, int val, int target)
+{
+    Node *prev = search(head, target);
+    if (prev)
+    {
+        init_node(val, prev->next, prev);
     }
     return head;
 }
 
-Node* delete(Node* head, int target){
-    Node* to_delete = search(head, target);
+Node *delete(Node *head, int target)
+{
+    Node *to_delete = search(head, target);
     // case 1 node not found
-    if(!to_delete) return head;
+    if (!to_delete)
+        return head;
     // case 2 node is head itself
-    if(to_delete == head){
-        Node* ans = head->next;
-        if(ans) ans->prev = NULL;
+    if (to_delete == head)
+    {
+        Node *ans = head->next;
+        if (ans)
+            ans->prev = NULL;
         free(head);
         return ans;
     }
     // case 3 node is anywhere but not head
-    if(to_delete->next) to_delete->next->prev = to_delete->prev;
+    if (to_delete->next)
+        to_delete->next->prev = to_delete->prev;
     to_delete->prev->next = to_delete->next;
     free(to_delete);
     return head;
 }
 
-Node* delete_all(Node* head){
-    Node* ptr = head;
-    while(ptr){
-        Node* next = ptr->next;
+Node *delete_all(Node *head)
+{
+    Node *ptr = head;
+    while (ptr)
+    {
+        Node *next = ptr->next;
         free(ptr);
         ptr = next;
     }
     return NULL;
 }
 
-int main(){
-
+int main()
+{
 }

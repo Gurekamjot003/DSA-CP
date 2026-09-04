@@ -35,27 +35,34 @@ Node *init_node2(int val, Node *left_subtree, Node *right_subtree)
     return ans;
 }
 
-void preorder(Node* root){
-    if(!root) return;
+void preorder(Node *root)
+{
+    if (!root)
+        return;
     printf("%d ", root->val);
     preorder(root->left);
     preorder(root->right);
 }
 
-void inorderd(Node* root){
-    if(!root) return;
-    preorder(root->left);
+void inorderd(Node *root)
+{
+    if (!root)
+        return;
+    inorderd(root->left);
     printf("%d ", root->val);
-    preorder(root->right);
+    inorderd(root->right);
 }
 
-void inorderd(Node* root){
-    if(!root) return;
-    preorder(root->left);
-    preorder(root->right);
+void postorder(Node *root)
+{
+    if (!root)
+        return;
+    postorder(root->left);
+    postorder(root->right);
     printf("%d ", root->val);
 }
 
-int main(){
+int main()
+{
     return 0;
 }

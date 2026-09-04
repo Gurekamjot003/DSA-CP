@@ -24,8 +24,15 @@ int max(int a, int b)
 Queue *init(int capacity)
 {
     Queue *ans = (Queue *)malloc(sizeof(Queue));
+    if (!ans)
+        return NULL;
     capacity = max(4, capacity);
     ans->arr = (int *)malloc(sizeof(int) * capacity);
+    if (!ans->arr)
+    {
+        free(ans);
+        return NULL;
+    }
     ans->front = -1, ans->back = -1;
     ans->capacity = capacity;
     return ans;
@@ -67,15 +74,24 @@ int get_front(Queue *q)
 
 boolean pop(Queue *q)
 {
-    if (is_empty(q))
+    if (!q || is_empty(q))
         return FALSE;
-    q->front++;
+    q->front = (q->front + 1) % q->capacity;
     if (q->front == (q->back + 1) % q->capacity)
     {
         q->front = -1;
         q->back = -1;
     }
     return TRUE;
+}
+
+void free_queue(Queue *q)
+{
+    if (q)
+    {
+        free(q->arr);
+        free(q);
+    }
 }
 
 int main()
@@ -93,6 +109,7 @@ int main()
         printf("%d\n", get_front(q));
 
     push(q, 7);
+    free_queue(q);
 
     return 0;
 }

@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const int INT_MIN = -(1<<30);
+const int INT_MIN = -(1 << 30);
 
-typedef struct 
+typedef struct
 {
     int capacity, size;
     int *arr;
@@ -23,10 +23,19 @@ int get_greater_pow_2(int n)
 
 vector *init_vector(int sz, int value)
 {
+    if (sz < 0)
+        return NULL;
     vector *v = (vector *)malloc(sizeof(vector));
+    if (!v)
+        return NULL;
 
     v->capacity = get_greater_pow_2(sz);
     v->arr = (int *)malloc(sizeof(int) * v->capacity);
+    if (!v->arr)
+    {
+        free(v);
+        return NULL;
+    }
     v->size = sz;
 
     for (int i = 0; i < sz; i++)
@@ -34,7 +43,7 @@ vector *init_vector(int sz, int value)
         v->arr[i] = value;
     }
     return v;
-};
+}
 
 int push_back(vector *v, int val)
 {
@@ -54,7 +63,7 @@ int push_back(vector *v, int val)
 
 int access_element(vector *v, int i)
 {
-    if (i >= v->size || i < 0)
+    if (!v || i >= v->size || i < 0)
     {
         printf("Segmentation fault!\n%d is out of scope", i);
         return INT_MIN;
@@ -66,13 +75,15 @@ int pop_back(vector *v)
 {
     if (v == NULL || v->size == 0)
         return 0;
-    if (--v->size < v->capacity / 4)
+    --v->size;
+    if (v->capacity > 4 && v->size <= v->capacity / 4)
     {
         int *new_arr = (int *)realloc(v->arr, sizeof(int) * v->capacity / 2);
-        if (new_arr == NULL)
-            return 0;
-        v->arr = new_arr;
-        v->capacity /= 2;
+        if (new_arr != NULL)
+        {
+            v->arr = new_arr;
+            v->capacity /= 2;
+        }
     }
     return 1;
 }
