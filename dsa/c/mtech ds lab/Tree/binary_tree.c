@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "tree.h"
 
 typedef enum boolean
 {
@@ -7,11 +8,7 @@ typedef enum boolean
     TRUE = 1
 } boolean;
 
-typedef struct Node
-{
-    int val;
-    struct Node *left, *right, *parent;
-} Node;
+
 
 Node *init_node(int val)
 {
