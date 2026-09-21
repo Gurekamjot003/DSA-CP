@@ -90,26 +90,67 @@ istream& getInputStream() {
 #endif
 
 class Solution {
-    const int mod = 1e9 +7;
+    int n;
+    vector<pii> range;
+    vi parent;
+
+    int find_ulti_parent(int i){
+        if(parent[i] == i) return i;
+        return parent[i] = find_ulti_parent(parent[i]);
+    }
+
+    void init(vi& nums){
+        n = nums.size();
+        range = vector<pii>(n);
+        rep(i, n) range[i] = {nums[i], nums[i]};
+        parent = vi(n);
+        iota(all(parent), 0);
+    }
+
+    bool merge_possible(int left, int right, int limit){
+        auto[s1,f1] = range[left];
+        auto[s2,f2] = range[right];
+
+        s2-=limit; f2+=limit;
+
+        if((s2<=f1 && f2>=f1) or (s2<=s1 && f2>=s1)) return true;
+        return false;
+    }
+    void merge(int left, int right){
+        parent[right] = left;
+        amin(range[left].first, range[right].first);
+        amax(range[left].second, range[right].second);
+    }
+
 public:
-    int distinctSubseqII(string s) {
+    vector<int> lexicographicallySmallestArray(vector<int>& nums, int limit) {
+        init(nums);
+
+        rep1(i, n-1){
+            int cur = i;
+            while(cur>0){
+                
+                int right = find_ulti_parent(cur); int left = find_ulti_parent(right-1);
+                if(merge_possible(left, right, limit)){
+                    merge(left, right);
+                    cur = left;
+                }
+                else break;
+            }
+        }
+        for(int i = n-1; i>=0; i--){
+            parent[i] = find_ulti_parent(i);
+        }
         
-        int n = s.size();
-        vi dp(26);
-        int ans = 0;
-        for(int i = 0; i<n; i++){
-            ans = (ans + dp[i])%mod;
-            if(dp[i]) 
-            if(!found_same)
-                dp[i] = (dp[i]+1)%mod; // for case where we can skip all prev
+        parent.push_back(n);
+
+        int prev = 0;
+        rep1(i, n){
+            if(parent[i] != parent[i-1]){
+                sort(nums.begin()+prev, nums.begin()+i);
+                prev = i;
+            }
         }
-
-        rep(i, n){
-            ans = (ans + dp[i])%mod;
-        }
-
-        return ans;
-
-
+        return nums;
     }
 };

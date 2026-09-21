@@ -90,26 +90,24 @@ istream& getInputStream() {
 #endif
 
 class Solution {
-    const int mod = 1e9 +7;
 public:
-    int distinctSubseqII(string s) {
-        
-        int n = s.size();
-        vi dp(26);
-        int ans = 0;
-        for(int i = 0; i<n; i++){
-            ans = (ans + dp[i])%mod;
-            if(dp[i]) 
-            if(!found_same)
-                dp[i] = (dp[i]+1)%mod; // for case where we can skip all prev
-        }
-
+    long long countIntersectingIntervals(vector<vector<int>>& intervals) {
+        ll ans = 0;
+        sort(all(intervals));
+        int n = intervals.size();
         rep(i, n){
-            ans = (ans + dp[i])%mod;
+            int left = i+1, right = n-1;
+            int cur = left;
+            while(left<=right){
+                int mid = (left+right)/2;
+                if(intervals[i][1] >= intervals[mid][0]){
+                    cur = mid;
+                    left = mid+1;
+                }
+                else right = mid-1;
+            }
+            ans += cur-left;
         }
-
         return ans;
-
-
     }
 };

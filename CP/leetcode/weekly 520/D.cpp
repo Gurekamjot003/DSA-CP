@@ -90,26 +90,25 @@ istream& getInputStream() {
 #endif
 
 class Solution {
-    const int mod = 1e9 +7;
 public:
-    int distinctSubseqII(string s) {
-        
-        int n = s.size();
-        vi dp(26);
-        int ans = 0;
-        for(int i = 0; i<n; i++){
-            ans = (ans + dp[i])%mod;
-            if(dp[i]) 
-            if(!found_same)
-                dp[i] = (dp[i]+1)%mod; // for case where we can skip all prev
+    vector<int> largestPower(vector<int>& nums) {
+        sort(nums.rbegin(), nums.rend());
+        vi ans(15);
+        int n = nums.size();
+        rep(i, 15){
+            bool found_0 = false;
+            rep(j, n){
+                if(found_0 && 1<<i & nums[j]){
+                    nums[j]^= 1<<i;
+                }
+                else if(1<<i & nums[j]){
+                    ans[14-i]++;
+                }
+                else found_0 = true;
+            }
+            sort(nums.rbegin(), nums.rend());
+            
         }
-
-        rep(i, n){
-            ans = (ans + dp[i])%mod;
-        }
-
         return ans;
-
-
     }
 };

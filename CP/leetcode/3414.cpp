@@ -90,26 +90,50 @@ istream& getInputStream() {
 #endif
 
 class Solution {
-    const int mod = 1e9 +7;
+
+    vi index;
+
+    int get_sum(vi& picked, vvi& intervals){
+        int sum = 0;
+        for(auto& n: picked) sum += intervals[index[n]][2];
+        return sum;
+    }
+    bool is_less(vi& ans, vi& cur, vvi& intervals){
+        if(cur.size() == 0) return false;
+        int sum = get_sum(ans, intervals) - get_sum(cur, intervals);
+        if(sum != 0) return sum>0;
+
+        // check for lexico
+        sort(all(cur));
+        return cur<ans;
+    }
+
+    int solve(vi& ans, vvi& dp, vvi& intervals, vi& cur, int i = 0){
+        if(i == intervals.size() or cur.size() == 4){
+            if(is_less(ans, cur, intervals)) ans = cur;
+            return 0;
+        }
+
+        if(dp[i][cur.size()] != -1) return dp[i][cur.size()];
+        cur.push_back(i);
+        int pick = intervals[index[i]][2] + solve(ans, dp, intervals, cur, i+1);
+        cur.pop_back();
+        int skip = solve(ans, dp, intervals,cur, i+1);
+        return dp[i][cur.size()] = max(pick, skip);
+    }
+    
 public:
-    int distinctSubseqII(string s) {
-        
-        int n = s.size();
-        vi dp(26);
-        int ans = 0;
-        for(int i = 0; i<n; i++){
-            ans = (ans + dp[i])%mod;
-            if(dp[i]) 
-            if(!found_same)
-                dp[i] = (dp[i]+1)%mod; // for case where we can skip all prev
-        }
+    vector<int> maximumWeight(vector<vector<int>>& intervals) {
+        int n = intervals.size();
+        index = vi(n);
+        iota(all(index), 0);
+        sort(all(index), [&](auto a, auto b){
+            return intervals[a][0]<intervals[b][0] or (intervals[a][0] == intervals[b][0] && intervals[a][1]>intervals[b][1]);
+        });
 
-        rep(i, n){
-            ans = (ans + dp[i])%mod;
-        }
-
+        vvi dp(n, vi(4,-1));
+        vi ans, cur;
+        solve(ans, dp, intervals, cur);
         return ans;
-
-
     }
 };

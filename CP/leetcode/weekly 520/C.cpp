@@ -90,26 +90,26 @@ istream& getInputStream() {
 #endif
 
 class Solution {
-    const int mod = 1e9 +7;
 public:
-    int distinctSubseqII(string s) {
-        
-        int n = s.size();
-        vi dp(26);
-        int ans = 0;
-        for(int i = 0; i<n; i++){
-            ans = (ans + dp[i])%mod;
-            if(dp[i]) 
-            if(!found_same)
-                dp[i] = (dp[i]+1)%mod; // for case where we can skip all prev
-        }
-
+    long long maxValue(vector<int>& nums) {
+        nums.insert(nums.begin(), 0);
+        ll ans = 0;
+        ll max_odd_idx_psum = INT_MIN, max_even_idx_psum = INT_MIN;
+        int n = nums.size();
+        ll psum = 0;
+        ll max_incr = 0;
         rep(i, n){
-            ans = (ans + dp[i])%mod;
+            if(i%2){
+                psum += nums[i];
+                amax(max_incr, (max_odd_idx_psum-psum)*2);
+                amax(max_odd_idx_psum, psum);
+            }
+            else{
+                psum -= nums[i];
+                amax(max_incr, (max_even_idx_psum-psum)*2);
+                amax(max_even_idx_psum, psum);
+            }            
         }
-
-        return ans;
-
-
+        return psum + max_incr;
     }
 };

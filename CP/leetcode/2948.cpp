@@ -90,26 +90,34 @@ istream& getInputStream() {
 #endif
 
 class Solution {
-    const int mod = 1e9 +7;
+    
+
 public:
-    int distinctSubseqII(string s) {
-        
-        int n = s.size();
-        vi dp(26);
-        int ans = 0;
-        for(int i = 0; i<n; i++){
-            ans = (ans + dp[i])%mod;
-            if(dp[i]) 
-            if(!found_same)
-                dp[i] = (dp[i]+1)%mod; // for case where we can skip all prev
+    vector<int> lexicographicallySmallestArray(vector<int>& nums, int limit) {
+        int n = nums.size();
+        vi index(n);
+        iota(all(index), 0);
+        sort(all(index), [&](auto a, auto b){
+            return nums[a]<nums[b];
+        });
+        vi groups(n);
+        int cur_group = 0;
+        vi group_idx = {0};
+        rep1(i, n-1){
+            if(nums[index[i]] > nums[index[i-1]] + limit){
+                cur_group++;
+                group_idx.push_back(i);
+            }
+            groups[index[i]] = cur_group;
         }
+       
 
+        vi ans(n);
         rep(i, n){
-            ans = (ans + dp[i])%mod;
+            int cur_group = groups[i];
+            int num = nums[index[group_idx[cur_group]++]];
+            ans[i] = num;
         }
-
         return ans;
-
-
     }
 };
