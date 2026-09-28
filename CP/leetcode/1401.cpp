@@ -88,50 +88,50 @@ istream& getInputStream() {
     return (file.is_open()? file: cin);
 }
 #endif
-#define INF INT_MAX/10;
 
 class Solution {
-    int dp[20][20][51][1024];
-    int max_energy, n, m;
-    vvi litter_val;
-    int solve(vector<string>& classroom, int i, int j, int energy, int mask = 0){
-        if(i<0 or j<0 or i==n or j == m or classroom[i][j] == 'X' or energy<0) return INF;
-        if(dp[i][j][energy][mask] != -1) return dp[i][j][energy][mask];
-
-        int og_energy = energy, og_mask = mask;
-        if(classroom[i][j] == 'R') energy = max_energy;
-        else if(classroom[i][j] == 'L'){
-            mask |= 1<<litter_val[i][j];
-        }
-        int di = 0, dj = 1;
-        int ans = INF;
-        rep(t, 4){
-            amin(ans, 1+solve(classroom, i+di, j+dj, energy-1, mask));
-            swap(di, dj);
-            dj = -dj;
-        }
-        return dp[i][j][og_energy][og_mask] = ans;
+    pair<bool, pair<double, double>> solve_eqn(int cur_center, int other_center, int other_val, int radius){
+        // cout<<cur_center<<" "<<other_center<<" "<<other_val<<" "<<radius<<endl;
+        double b = -2*cur_center, c = cur_center*cur_center + (other_val-other_center)*(other_val - other_center) - radius*radius;
+        double a = 1;
+        double D = b*b-4*a*c;
+        // cout<<b<<" "<<c<<" "<<D<<endl;
+        if(D<0) return {false, {}};
+        // cout<<sqrt(D)<<endl;
+        return {true, {(-b+sqrt(D))/2, (-b-sqrt(D))/2}};
     }
-public:
-    int minMoves(vector<string>& classroom, int energy) {
-        memset(dp, -1, sizeof(dp));
-        max_energy = energy;
-        n = classroom.size(), m = classroom[0].size();
-        int x, y;
-        litter_val = vvi(n, vi(m));
-        int l_val = 0;
-        rep(i, n){
-            rep(j, m){
-                if(classroom[i][j] == 'S'){
-                    x = i; y = j;
-                }
-                if(classroom[i][j] == 'L'){
-                    litter_val[i][j] = l_val++;
-                }
+
+    bool check_for_values(int cur_center, int other_center, vector<int> vals_to_put, int radius, int min_val, int max_val){
+        for(auto& other_val: vals_to_put){
+            auto root_vals = solve_eqn(cur_center, other_center, other_val, radius);
+            if(!root_vals.first) continue;
+            auto [root1, root2] = root_vals.second;
+            // cout<<root1<<" "<<root2<<endl;
+            if((min_val<=root1 && max_val>=root1) or (min_val<=root2 && max_val>=root2)) return true;
+        }
+        return false;
+    }
+
+    double euclid_distance(int x1, int y1, int x2, int y2){
+        return sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
+    }
+    double check_corner_distance(int xCenter, int yCenter, vector<int>X, vector<int>Y, int radius){
+        for(auto& x: X){
+            for(auto& y: Y){
+                if(euclid_distance(xCenter, yCenter, x, y) <= radius) return true;
             }
         }
+        return false;
+    }
+public:
+    bool checkOverlap(int radius, int xCenter, int yCenter, int x1, int y1, int x2, int y2) {
+        if(check_for_values(yCenter, xCenter, {x1, x2}, radius, y1, y2)) return true;
+        if(check_for_values(xCenter, yCenter, {y1,y2}, radius, x1, x2)) return true;
+        if(xCenter>=x1 && xCenter<=x2 && yCenter>=y1 && yCenter<=y2) return true;  // circle inside rectangle
+        if(check_corner_distance(xCenter, yCenter, {x1, x2}, {y1, y2}, radius)) return true; // rectangle inside circle
+
+        return false;
         
-        
-        return solve(classroom, x, y, energy);
+
     }
 };

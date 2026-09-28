@@ -88,50 +88,27 @@ istream& getInputStream() {
     return (file.is_open()? file: cin);
 }
 #endif
-#define INF INT_MAX/10;
 
 class Solution {
-    int dp[20][20][51][1024];
-    int max_energy, n, m;
-    vvi litter_val;
-    int solve(vector<string>& classroom, int i, int j, int energy, int mask = 0){
-        if(i<0 or j<0 or i==n or j == m or classroom[i][j] == 'X' or energy<0) return INF;
-        if(dp[i][j][energy][mask] != -1) return dp[i][j][energy][mask];
-
-        int og_energy = energy, og_mask = mask;
-        if(classroom[i][j] == 'R') energy = max_energy;
-        else if(classroom[i][j] == 'L'){
-            mask |= 1<<litter_val[i][j];
-        }
-        int di = 0, dj = 1;
-        int ans = INF;
-        rep(t, 4){
-            amin(ans, 1+solve(classroom, i+di, j+dj, energy-1, mask));
-            swap(di, dj);
-            dj = -dj;
-        }
-        return dp[i][j][og_energy][og_mask] = ans;
-    }
 public:
-    int minMoves(vector<string>& classroom, int energy) {
-        memset(dp, -1, sizeof(dp));
-        max_energy = energy;
-        n = classroom.size(), m = classroom[0].size();
-        int x, y;
-        litter_val = vvi(n, vi(m));
-        int l_val = 0;
-        rep(i, n){
-            rep(j, m){
-                if(classroom[i][j] == 'S'){
-                    x = i; y = j;
+    vector<int> largestPower(vector<int>& nums) {
+        sort(nums.rbegin(), nums.rend());
+        vi ans(15);
+        int n = nums.size();
+        rep(i, 15){
+            bool found_0 = false;
+            rep(j, n){
+                if(found_0 && 1<<i & nums[j]){
+                    nums[j]^= 1<<i;
                 }
-                if(classroom[i][j] == 'L'){
-                    litter_val[i][j] = l_val++;
+                else if(1<<i & nums[j]){
+                    ans[14-i]++;
                 }
+                else found_0 = true;
             }
+            sort(nums.rbegin(), nums.rend());
+            
         }
-        
-        
-        return solve(classroom, x, y, energy);
+        return ans;
     }
 };

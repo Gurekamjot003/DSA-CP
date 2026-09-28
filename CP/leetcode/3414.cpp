@@ -88,50 +88,52 @@ istream& getInputStream() {
     return (file.is_open()? file: cin);
 }
 #endif
-#define INF INT_MAX/10;
 
 class Solution {
-    int dp[20][20][51][1024];
-    int max_energy, n, m;
-    vvi litter_val;
-    int solve(vector<string>& classroom, int i, int j, int energy, int mask = 0){
-        if(i<0 or j<0 or i==n or j == m or classroom[i][j] == 'X' or energy<0) return INF;
-        if(dp[i][j][energy][mask] != -1) return dp[i][j][energy][mask];
 
-        int og_energy = energy, og_mask = mask;
-        if(classroom[i][j] == 'R') energy = max_energy;
-        else if(classroom[i][j] == 'L'){
-            mask |= 1<<litter_val[i][j];
-        }
-        int di = 0, dj = 1;
-        int ans = INF;
-        rep(t, 4){
-            amin(ans, 1+solve(classroom, i+di, j+dj, energy-1, mask));
-            swap(di, dj);
-            dj = -dj;
-        }
-        return dp[i][j][og_energy][og_mask] = ans;
+    vi index;
+
+    int get_sum(vi& picked, vvi& intervals){
+        int sum = 0;
+        for(auto& n: picked) sum += intervals[index[n]][2];
+        return sum;
     }
-public:
-    int minMoves(vector<string>& classroom, int energy) {
-        memset(dp, -1, sizeof(dp));
-        max_energy = energy;
-        n = classroom.size(), m = classroom[0].size();
-        int x, y;
-        litter_val = vvi(n, vi(m));
-        int l_val = 0;
-        rep(i, n){
-            rep(j, m){
-                if(classroom[i][j] == 'S'){
-                    x = i; y = j;
-                }
-                if(classroom[i][j] == 'L'){
-                    litter_val[i][j] = l_val++;
-                }
-            }
+    bool is_less(vi& ans, vi& cur, vvi& intervals){
+        if(cur.size() == 0) return false;
+        int sum = get_sum(ans, intervals) - get_sum(cur, intervals);
+        if(sum != 0) return sum>0;
+
+        // check for lexico
+        sort(all(cur));
+        return cur<ans;
+    }
+
+    int solve(vi& ans, vvi& dp, vvi& intervals, vi& cur, int i = 0){
+        if(i == intervals.size() or cur.size() == 4){
+            if(is_less(ans, cur, intervals)) ans = cur;
+            return 0;
         }
-        
-        
-        return solve(classroom, x, y, energy);
+
+        if(dp[i][cur.size()] != -1) return dp[i][cur.size()];
+        cur.push_back(i);
+        int pick = intervals[index[i]][2] + solve(ans, dp, intervals, cur, i+1);
+        cur.pop_back();
+        int skip = solve(ans, dp, intervals,cur, i+1);
+        return dp[i][cur.size()] = max(pick, skip);
+    }
+    
+public:
+    vector<int> maximumWeight(vector<vector<int>>& intervals) {
+        int n = intervals.size();
+        index = vi(n);
+        iota(all(index), 0);
+        sort(all(index), [&](auto a, auto b){
+            return intervals[a][0]<intervals[b][0] or (intervals[a][0] == intervals[b][0] && intervals[a][1]>intervals[b][1]);
+        });
+
+        vvi dp(n, vi(4,-1));
+        vi ans, cur;
+        solve(ans, dp, intervals, cur);
+        return ans;
     }
 };

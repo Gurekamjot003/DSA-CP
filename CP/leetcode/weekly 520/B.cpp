@@ -88,50 +88,26 @@ istream& getInputStream() {
     return (file.is_open()? file: cin);
 }
 #endif
-#define INF INT_MAX/10;
 
 class Solution {
-    int dp[20][20][51][1024];
-    int max_energy, n, m;
-    vvi litter_val;
-    int solve(vector<string>& classroom, int i, int j, int energy, int mask = 0){
-        if(i<0 or j<0 or i==n or j == m or classroom[i][j] == 'X' or energy<0) return INF;
-        if(dp[i][j][energy][mask] != -1) return dp[i][j][energy][mask];
-
-        int og_energy = energy, og_mask = mask;
-        if(classroom[i][j] == 'R') energy = max_energy;
-        else if(classroom[i][j] == 'L'){
-            mask |= 1<<litter_val[i][j];
-        }
-        int di = 0, dj = 1;
-        int ans = INF;
-        rep(t, 4){
-            amin(ans, 1+solve(classroom, i+di, j+dj, energy-1, mask));
-            swap(di, dj);
-            dj = -dj;
-        }
-        return dp[i][j][og_energy][og_mask] = ans;
-    }
 public:
-    int minMoves(vector<string>& classroom, int energy) {
-        memset(dp, -1, sizeof(dp));
-        max_energy = energy;
-        n = classroom.size(), m = classroom[0].size();
-        int x, y;
-        litter_val = vvi(n, vi(m));
-        int l_val = 0;
+    long long countIntersectingIntervals(vector<vector<int>>& intervals) {
+        ll ans = 0;
+        sort(all(intervals));
+        int n = intervals.size();
         rep(i, n){
-            rep(j, m){
-                if(classroom[i][j] == 'S'){
-                    x = i; y = j;
+            int left = i+1, right = n-1;
+            int cur = left;
+            while(left<=right){
+                int mid = (left+right)/2;
+                if(intervals[i][1] >= intervals[mid][0]){
+                    cur = mid;
+                    left = mid+1;
                 }
-                if(classroom[i][j] == 'L'){
-                    litter_val[i][j] = l_val++;
-                }
+                else right = mid-1;
             }
+            ans += cur-left;
         }
-        
-        
-        return solve(classroom, x, y, energy);
+        return ans;
     }
 };
