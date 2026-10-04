@@ -7,6 +7,13 @@ typedef struct Node
     struct Node *left, *right, *parent;
 } Node;
 
+Node *init_node(int val)
+{
+    Node *ans = (Node *)malloc(sizeof(Node));
+    ans->val = val;
+    ans->left = ans->right = ans->parent = NULL;
+    return ans;
+}
 typedef enum
 {
     FALSE = 0,
