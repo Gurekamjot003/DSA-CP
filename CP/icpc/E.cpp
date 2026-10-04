@@ -106,7 +106,8 @@ void btk(int n, vector<vector<int>> edges, vector<bool> &used, vector<vector<vec
 
 void search(vector<vector<pair<int, int>>> &graph, int &x, int u = 1, int parent = -1)
 {
-    int og_x = 1;
+    int og_x = x;
+    // cout<<1<<endl;
     for (auto &[v, p] : graph[u])
     {
         if (v == parent)
@@ -125,15 +126,18 @@ ll brute(int n, int c, vector<vector<int>> &edges)
     vector<vector<vector<int>>> edges_perm;
     vector<bool> used(n);
     btk(n, edges, used, edges_perm);
-    // cout << 1 << endl;
+    // cout << edges_perm.size() << endl;
+    
     ll ans = 0;
+    int perm = 0;
     for (auto &edges : edges_perm)
     {
         vector<vector<pair<int, int>>> graph(n + 1);
-
+        // cout<<"Perm: "<<++perm<<endl;
+        // cout<<"All edges:"<<endl;
         for (auto &e : edges)
         {
-
+            // cout<<e[0]<<" "<<e[1]<<" "<<e[2]<<endl;
             graph[e[0]].push_back({e[1], e[2]});
             graph[e[1]].push_back({e[0], e[2]});
         }
@@ -175,12 +179,12 @@ int get_random(int start, int end)
 
 void judge()
 {
-    srand(100);
-    int t = 1000;
+    srand(0);
+    int t = 10;
     while (t--)
     {
 
-        int n = get_random(2, 4);
+        int n = 10; 
         int c = get_random(1, n / 2);
         // cout << n << " " << c << endl;
         vector<vector<int>> edges;
@@ -222,11 +226,12 @@ void judge()
             }
         }
 
-        if (solve(n, c, edges) != brute(n, c, edges))
+        ll correct_ans = brute(n, c, edges), my_ans = solve(n, c, edges);
+        if ( my_ans != correct_ans)
         {
 
-            cout << "Correct ans: " << brute(n, c, edges) << endl;
-            cout << "Your ans: " << solve(n, c, edges) << endl;
+            cout << "Correct ans: " << correct_ans << endl;
+            cout << "Your ans: " << my_ans << endl;
 
             cout << "n: " << n << endl;
             cout << "c: " << c << endl;
@@ -250,9 +255,6 @@ int main()
     getInverseFactorial(N, fact, invFact);
 
     judge();
-    // cout << endl
-    //      << endl
-    //      << 1 << endl;
     // int t = 1;
     // cin >> t;
     // while (t--)
