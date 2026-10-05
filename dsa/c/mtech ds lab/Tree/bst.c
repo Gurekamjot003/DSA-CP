@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tree.h"
+#include "../dynamic_array.c"
 
 Node* init_bst(int* arr, int sz){
     if(sz<1) return NULL;
@@ -170,6 +171,19 @@ int min(Node* root){
     return INT_MAX;
 }
 
+void get_all_helper(Node* root, vector* ele){
+    if(!root) return;
+    get_all_helper(root->left, ele);
+    push_back(ele, root->val);
+    get_all_helper(root->right, ele);
+}
+
+vector* get_all_elements(Node* root){
+    vector* ans = init_vector(0, 0);
+    get_all_helper(root, ans);
+    return ans;
+}
+
 Node* join(Node* root1, Node* root2){
     if(!root1) return root2;
     if(!root2) return root1;
@@ -204,9 +218,16 @@ Node* join(Node* root1, Node* root2){
 
 
     // This case is in which we have to do naively in O(n+m)
-
+    vector* ele1 = get_all_elements(root1), *ele2 = get_all_elements(root2);
+    free_tree(root1); free_tree(root2);
+    for(int i = 0; i<ele2->size; i++){
+        push_back(ele1, ele2->arr[i]);
+    }
     
-
+    Node* ans = init_bst(ele1->arr, ele1->size);
+    free_vector(ele1);
+    free_vector(ele2);
+    return ans;
 }
 
 Node** split(Node* root, int val){ // split tree into two trees => one having all values <= val & other having > val

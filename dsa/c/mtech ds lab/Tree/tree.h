@@ -81,6 +81,13 @@ void dequeue(Queue *q)
     q->size--;
 }
 
+void free_tree(Node* root){
+    if(!root) return;
+    free_tree(root->left);
+    free_tree(root->right);
+    free(root);
+}
+
 void print(Node* root){
     Queue* q = init_queue();
 

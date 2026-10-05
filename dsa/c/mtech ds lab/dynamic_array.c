@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 const int INT_MIN = -(1 << 30);
+const int INT_MAX = 1 << 30;
 
 typedef struct
 {
