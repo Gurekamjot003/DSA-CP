@@ -98,25 +98,25 @@ void free_vector(vector *v)
     }
 }
 
-int main()
-{
-    vector *v = init_vector(0, 0);
-    for (int i = 1; i < 100; i++)
-        push_back(v, i);
-    for (int i = 0; i < v->size; i++)
-    {
-        printf("%d ", access_element(v, i));
-    }
-    printf("\n");
-    for (int i = 0; i < 80; i++)
-    {
-        pop_back(v);
-    }
-    printf("Capacity = %d\n", v->capacity);
-    for (int i = 0; i < v->size; i++)
-    {
-        printf("%d ", access_element(v, i));
-    }
-    free_vector(v);
-    return 0;
-}
+// int main()
+// {
+//     vector *v = init_vector(0, 0);
+//     for (int i = 1; i < 100; i++)
+//         push_back(v, i);
+//     for (int i = 0; i < v->size; i++)
+//     {
+//         printf("%d ", access_element(v, i));
+//     }
+//     printf("\n");
+//     for (int i = 0; i < 80; i++)
+//     {
+//         pop_back(v);
+//     }
+//     printf("Capacity = %d\n", v->capacity);
+//     for (int i = 0; i < v->size; i++)
+//     {
+//         printf("%d ", access_element(v, i));
+//     }
+//     free_vector(v);
+//     return 0;
+// }
