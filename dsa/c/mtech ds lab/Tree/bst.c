@@ -106,39 +106,81 @@ Node* inorder_successor(Node* cur){
     return ptr->parent;
 }
 
-Node* erase_sir_method(Node* root, int val){
-    Node* to_delete = search(root, val);
-    Node* replacement = NULL;
-    if(to_delete->left){
-        replacement = inorder_predecessor(to_delete);
-    }
-    else if(to_delete->right){
-        replacement = inorder_successor(to_delete);
-    }
-    else{ // leaf node
-        if(!to_delete->parent){ // root node is leaf node
-            free(to_delete);
-            return NULL;
-        }
+void erase_sir_method(Node** root, int val){
 
-        Node* parent = to_delete->parent;
-        if(to_delete->val <= parent->val) parent->left = NULL;
-        else parent->right = NULL;
-        free(to_delete);
-        return root;
+    // Iterative method
+    Node* ptr = *root;
+    Node* parent = ptr->parent;
+    while(ptr){
+        if(ptr->val == val){
+            if(ptr->left){
+                Node* replacement = inorder_predecessor(ptr);
+                ptr->val = replacement->val;
+                ptr = replacement;
+                val = replacement->val;
+            }
+            else if(ptr->right){
+                Node* replacement = inorder_successor(ptr);
+                ptr->val = replacement->val;
+                ptr = replacement;
+                val = replacement->val;
+            }
+            else{ // leaf node => only case in which actual node is deletd from tree
+                if(parent == NULL){ // this is the case where root is the only element in tree & that is to be deleted
+                    free(ptr);
+                    *root = NULL;
+                    return;
+                }
+                if(ptr == parent->left){
+                    parent->left = NULL;
+                }
+                else parent->right = NULL;
+                free(ptr);
+                return;
+            }
+
+        }
+        else if(ptr->val < val){
+            ptr = ptr->left;
+        }
+        else ptr = ptr->right;
+        parent = ptr->parent;
     }
-    int replacement_val = replacement->val;
-    Node* parent = replacement->parent; // it can be proven that parent of replacement always exists
-    if(replacement->val <= parent->val){
-        parent->left = erase_sir_method(parent->left, replacement->val);
-        if(parent->left) parent->left->parent = parent;
-    }
-    else{
-        parent->right = erase_sir_method(parent->right, replacement->val);
-        if(parent->right) parent->right->parent = parent;
-    }
-    to_delete->val = replacement_val;
-    return root;
+
+    // recursive method
+    // Node* to_delete = search(root, val);
+
+    // Node* replacement = NULL;
+    // if(to_delete->left){
+    //     replacement = inorder_predecessor(to_delete);
+    // }
+    // else if(to_delete->right){
+    //     replacement = inorder_successor(to_delete);
+    // }
+    // else{ // leaf node
+    //     if(!to_delete->parent){ // root node is leaf node
+    //         free(to_delete);
+    //         return NULL;
+    //     }
+
+    //     Node* parent = to_delete->parent;
+    //     if(to_delete->val <= parent->val) parent->left = NULL;
+    //     else parent->right = NULL;
+    //     free(to_delete);
+    //     return root;
+    // }
+    // int replacement_val = replacement->val;
+    // Node* parent = replacement->parent; // it can be proven that parent of replacement always exists
+    // if(replacement->val <= parent->val){
+    //     parent->left = erase_sir_method(parent->left, replacement->val);
+    //     if(parent->left) parent->left->parent = parent;
+    // }
+    // else{
+    //     parent->right = erase_sir_method(parent->right, replacement->val);
+    //     if(parent->right) parent->right->parent = parent;
+    // }
+    // to_delete->val = replacement_val;
+    // return root;
 }
 
 Node* max_node(Node* root){
