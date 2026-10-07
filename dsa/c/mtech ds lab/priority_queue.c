@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "dynamic_array.c"
 
 typedef enum
 {
@@ -6,200 +7,105 @@ typedef enum
     true = 1
 } bool;
 
-#define MIN_INT (-2147483647 - 1)
-#define MAX_INT 2147483647
 
-typedef struct pq
+typedef struct priority_queue
 {
-    int *a;
-    int n;
-    int capacity;
-} pq;
+    vector* v;
+} priority_queue;
 
-static void swap(int *a, int *b)
+void swap(int *a, int *b)
 {
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-static void sift_up(pq *queue, int index)
+void sift_up(priority_queue *pq, int index)
 {
-    while (index > 0)
-    {
-        int parent = (index - 1) / 2;
-        if (queue->a[parent] >= queue->a[index])
-            break;
-        swap(&queue->a[parent], &queue->a[index]);
-        index = parent;
-    }
-}
-
-static void sift_down(pq *queue, int index)
-{
-    while (true)
-    {
-        int left = 2 * index + 1;
-        int right = 2 * index + 2;
-        int largest = index;
-
-        if (left < queue->n && queue->a[left] > queue->a[largest])
-            largest = left;
-        if (right < queue->n && queue->a[right] > queue->a[largest])
-            largest = right;
-        if (largest == index)
-            return;
-
-        swap(&queue->a[index], &queue->a[largest]);
-        index = largest;
-    }
-}
-
-static void heapify(pq *queue)
-{
-    for (int index = queue->n / 2 - 1; index >= 0; index--)
-        sift_down(queue, index);
-}
-
-pq *init(int *a, int n)
-{
-    if (n < 0 || (n > 0 && !a))
-        return NULL;
-
-    pq *queue = malloc(sizeof(pq));
-    if (!queue)
-        return NULL;
-
-    queue->capacity = n > 4 ? n : 4;
-    queue->n = n;
-    queue->a = malloc((size_t)queue->capacity * sizeof(int));
-    if (!queue->a)
-    {
-        free(queue);
-        return NULL;
-    }
-
-    for (int index = 0; index < n; index++)
-        queue->a[index] = a[index];
-    heapify(queue);
-    return queue;
-}
-
-int top(pq *queue)
-{
-    if (!queue || queue->n == 0)
-        return MIN_INT;
-    return queue->a[0];
-}
-
-int pop(pq *queue)
-{
-    if (!queue || queue->n == 0)
-        return MIN_INT;
-
-    int result = queue->a[0];
-    queue->a[0] = queue->a[--queue->n];
-    if (queue->n > 0)
-        sift_down(queue, 0);
-    return result;
-}
-
-bool increment_key(pq *queue, int val, int k)
-{
-    if (!queue || k < 0)
-        return false;
-
-    for (int index = 0; index < queue->n; index++)
-    {
-        if (queue->a[index] == val)
-        {
-            if (k > MAX_INT - queue->a[index])
-                return false;
-            queue->a[index] += k;
-            sift_up(queue, index);
-            return true;
+    int* arr = pq->v->arr;
+    while(index>0){
+        int parent = (index-1)/2;
+        if(arr[parent]<arr[index]){
+            swap(&arr[parent], &arr[index]);
+            index = parent;
         }
+        else break;
     }
-    return false;
 }
 
-bool insert(pq *queue, int x)
+void sift_down(priority_queue *queue, int index)
 {
-    if (!queue)
-        return false;
-
-    if (queue->n == queue->capacity)
-    {
-        int new_capacity = queue->capacity * 2;
-        int *new_array = realloc(queue->a, (size_t)new_capacity * sizeof(int));
-        if (!new_array)
-            return false;
-        queue->a = new_array;
-        queue->capacity = new_capacity;
+    int*arr = queue->v->arr, size = queue->v->size;
+    while(index<size){
+        int max_idx = index, left = index*2+1, right = index*2 + 2;
+        if(left<size && arr[left]>arr[max_idx]) max_idx = left;
+        if(right<size && arr[right] > arr[max_idx]) max_idx = right;
+        if(index == max_idx) return;
+        swap(&arr[index], &arr[max_idx]);
+        index = max_idx;
     }
-
-    queue->a[queue->n] = x;
-    queue->n++;
-    sift_up(queue, queue->n - 1);
-    return true;
 }
 
-bool delete(pq *queue, int x)
+void heapify(priority_queue *queue)
 {
-    if (!queue)
-        return false;
-
-    for (int index = 0; index < queue->n; index++)
-    {
-        if (queue->a[index] == x)
-        {
-            queue->a[index] = queue->a[--queue->n];
-            if (index < queue->n)
-            {
-                if (index > 0 && queue->a[index] > queue->a[(index - 1) / 2])
-                    sift_up(queue, index);
-                else
-                    sift_down(queue, index);
-            }
-            return true;
-        }
+    int size = queue->v->size;
+    int* arr = queue->v->arr;
+    for(int i = (size-2)/2; i>=0; i--){
+        sift_down(queue, i);
     }
-    return false;
 }
 
-pq *meld(pq *queue1, pq *queue2)
+priority_queue *init(int *a, int n)
 {
-    if (!queue1 || !queue2)
-        return NULL;
-
-    pq *result = malloc(sizeof(pq));
-    if (!result)
-        return NULL;
-
-    result->n = queue1->n + queue2->n;
-    result->capacity = result->n > 4 ? result->n : 4;
-    result->a = malloc((size_t)result->capacity * sizeof(int));
-    if (!result->a)
-    {
-        free(result);
-        return NULL;
+    vector* v = init_vector(n, 0);
+    for(int i = 0; i<n; i++){
+        v->arr[i] = a[i];
     }
-
-    for (int index = 0; index < queue1->n; index++)
-        result->a[index] = queue1->a[index];
-    for (int index = 0; index < queue2->n; index++)
-        result->a[queue1->n + index] = queue2->a[index];
-    heapify(result);
-    return result;
+    priority_queue* ans = (priority_queue*) malloc(sizeof(priority_queue));
+    ans->v = v;
+    heapify(ans);
+    return ans;
 }
 
-void free_pq(pq *queue)
+int top(priority_queue *queue)
 {
-    if (queue)
-    {
-        free(queue->a);
-        free(queue);
-    }
+    if(queue->v->size == 0) return -1;
+    return queue->v->arr[0];
+}
+
+int pop(priority_queue *queue)
+{
+    int ans = top(queue);
+    vector* v = queue->v;
+    swap(&v->arr[0], &v->arr[v->size-1]);
+    v->size--;
+    sift_down(queue, 0);
+    return ans;
+}
+
+bool increment_key(priority_queue *queue, int val, int k)
+{
+    
+}
+
+bool insert(priority_queue *queue, int x)
+{
+    
+}
+
+bool delete(priority_queue *queue, int x)
+{
+   
+}
+
+priority_queue *meld(priority_queue *queue1, priority_queue *queue2)
+{
+   
+}
+
+void free_pq(priority_queue *queue)
+{
+   
 }
 
 int main(void)
