@@ -83,30 +83,42 @@ int pop(priority_queue *queue)
     return ans;
 }
 
-bool increment_key(priority_queue *queue, int val, int k)
+bool increment_key(priority_queue *pq, int val, int index)
 {
-    
+    pq->v->arr[index] = val;
+    sift_up(pq, index);
+    return true;
 }
 
-bool insert(priority_queue *queue, int x)
+bool insert(priority_queue *pq, int val)
 {
-    
+    push_back(pq->v, val);
+    sift_up(pq, pq->v->size-1);
+    return true;
 }
 
-bool delete(priority_queue *queue, int x)
+bool delete(priority_queue *pq, int index)
 {
-   
+    increment_key(pq, INT_MAX, index);
+    pop(pq);
 }
 
-priority_queue *meld(priority_queue *queue1, priority_queue *queue2)
+void free_pq(priority_queue *pq)
 {
-   
+   free_vector(pq->v);
+   free(pq);
 }
 
-void free_pq(priority_queue *queue)
+priority_queue *meld(priority_queue *pq1, priority_queue *pq2)
 {
-   
+    for(int i = 0; i<pq2->v->size; i++){
+        push_back(pq1->v, pq2->v->arr[i]);
+    }
+    heapify(pq1);
+    free_pq(pq2);
+    return pq1;
 }
+
 
 int main(void)
 {
