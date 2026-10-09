@@ -119,25 +119,34 @@ int extract_max(priority_queue *pq)
 
 bool delete(priority_queue *pq, Node** to_delete)
 {
+    Node* parent = (*to_delete)->parent;
     *to_delete = merge_trees((*to_delete)->left, (*to_delete)->right);
+    (*to_delete)->parent = parent;
     return true;
 }
 
 
-bool increment_key(priority_queue *pq, int val, int index)
+bool increment_key(priority_queue *pq, int val, Node* node)
 {
-    pq->v->arr[index] = val;
-    sift_up(pq, index);
+    delete(pq, node);
+    pq = meld(pq, init_single_ele_pq(val));
     return true;
 }
 
 
-
+void free_node(Node* node){
+    if(node == nil) return;
+    Node* left = node->left, *right = node->right;
+    free(node);
+    free_node(left);
+    free_node(right);
+}
 
 void free_pq(priority_queue *pq)
 {
-   free_vector(pq->v);
-   free(pq);
+    free_node(pq->root);
+    free(nil);
+    free(pq);
 }
 
 
