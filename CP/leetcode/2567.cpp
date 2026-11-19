@@ -92,11 +92,26 @@ istream& getInputStream() {
 class Solution {
 public:
     int minimizeSum(vector<int>& nums) {
-        sort(all(nums));
         int n = nums.size();
+        priority_queue<int> max_heap;
+        priority_queue<int, vi, greater<>> min_heap;
+        rep(i, n){
+            max_heap.push(nums[i]);
+            min_heap.push(nums[i]);
+            if(max_heap.size()>3) max_heap.pop();
+            if(min_heap.size()>3) min_heap.pop();
+        }
+        vi min_vals;
+        while(!max_heap.empty()){
+            min_vals.push_back(max_heap.top());
+            max_heap.pop();
+        }
+        reverse(all(min_vals));
+        
         int ans = INT_MAX;
         for(int i = 0; i<3; i++){
-            ans = min(ans, nums[n-3+i] - nums[i]);
+            ans = min(ans,  min_heap.top() - min_vals[i]);
+            min_heap.pop();
         }
         return ans;
     }
